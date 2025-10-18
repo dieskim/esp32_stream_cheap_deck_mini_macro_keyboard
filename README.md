@@ -73,30 +73,6 @@ Configure the following settings in Arduino IDE:
 2. Open **Tools → Serial Monitor** (set baud rate to 115200)
 3. You should see the device boot up and initialization messages
 
-## Method 2: Using ESP-IDF (Advanced Users)
-
-### Step 1: Install ESP-IDF
-
-Follow the official ESP-IDF installation guide at [docs.espressif.com](https://docs.espressif.com/projects/esp-idf/en/latest/esp32c3/get-started/)
-
-```bash
-git clone --recursive https://github.com/espressif/esp-idf.git
-cd esp-idf
-./install.sh esp32c3
-. ./export.sh
-```
-
-### Step 2: Build and Flash
-
-```bash
-cd esp32_stream_cheap_deck_mini_macro_keyboard
-idf.py set-target esp32c3
-idf.py build
-idf.py -p /dev/ttyUSB0 flash monitor
-```
-
-Replace `/dev/ttyUSB0` with your actual port.
-
 ## Troubleshooting
 
 ### Device Not Detected
@@ -119,15 +95,6 @@ Replace `/dev/ttyUSB0` with your actual port.
 - **Check baud rate**: Ensure Serial Monitor is set to 115200 baud
 - **Verify USB CDC**: Make sure "USB CDC On Boot" is enabled in board settings
 
-### Permission Denied (Linux/macOS)
-
-Add your user to the dialout group:
-
-```bash
-sudo usermod -a -G dialout $USER
-```
-
-Log out and log back in for changes to take effect.
 
 ## Additional Resources
 
@@ -135,10 +102,3 @@ Log out and log back in for changes to take effect.
 - [Arduino ESP32 GitHub](https://github.com/espressif/arduino-esp32)
 - [Project Issues](https://github.com/dieskim/esp32_stream_cheap_deck_mini_macro_keyboard/issues)
 
-## License
-
-Please refer to the main repository for license information.
-
-## Contributing
-
-Contributions are welcome! Please submit pull requests or open issues for bugs and feature requests.
