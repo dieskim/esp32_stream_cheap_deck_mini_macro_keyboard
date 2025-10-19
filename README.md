@@ -1,7 +1,7 @@
 # 3D Printed Case and Instructions
 [https://makerworld.com/en/models/1899311-esp32-stream-cheap-deck-bluetooth-macro-keyboard](https://makerworld.com/en/models/1899311-esp32-stream-cheap-deck-bluetooth-macro-keyboard)
 
-![ESP32 Stream Deck]([https://via.placeholder.com/800x400/1a1a1a/00ff00?text=ESP32+Stream+Deck+Mini](https://makerworld.bblmw.com/makerworld/model/US212b78efe735a6/design/2025-10-18_c1d83db0025458.png?x-oss-process=image/resize,w_1000/format,webp))
+![ESP32 Stream Deck](https://raw.githubusercontent.com/dieskim/esp32_stream_cheap_deck_mini_macro_keyboard/main/ESP32%20C3%20Supermini%20-%20Stream%20Cheap%20Deck%20-%20Mini%20Macro%20Keyboard.png)
 
 # ESP32-C3 Stream Deck Mini Macro Keyboard - Flashing Instructions
 
