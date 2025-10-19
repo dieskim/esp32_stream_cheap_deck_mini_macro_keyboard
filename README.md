@@ -1,9 +1,9 @@
+# ESP32-C3 Stream Deck Mini Macro Keyboard - Flashing Instructions
+
 # 3D Printed Case and Instructions
 [https://makerworld.com/en/models/1899311-esp32-stream-cheap-deck-bluetooth-macro-keyboard](https://makerworld.com/en/models/1899311-esp32-stream-cheap-deck-bluetooth-macro-keyboard)
 
 ![ESP32 Stream Deck](https://raw.githubusercontent.com/dieskim/esp32_stream_cheap_deck_mini_macro_keyboard/main/ESP32%20C3%20Supermini%20-%20Stream%20Cheap%20Deck%20-%20Mini%20Macro%20Keyboard.png)
-
-# ESP32-C3 Stream Deck Mini Macro Keyboard - Flashing Instructions
 
 This guide will help you flash the ESP32 Stream Deck Mini Macro Keyboard firmware to your ESP32-C3 device.
 
