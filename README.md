@@ -34,6 +34,8 @@ Download and install Arduino IDE 2.0 or later from [arduino.cc](https://www.ardu
 5. Go to **Tools → Board → Boards Manager**
 6. Search for "esp32"
 7. Install **"esp32 by Espressif Systems"**
+8. Roll back the ESP32 board package (e.g., to 2.0.14) where the BLE API accepted std::string.
+9. In Boards Manager: ESP32 by Espressif → select 2.0.14 → Install
 
 ### Step 3: Install Required Library
 
