@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESP32 Stream Deck Flasher</title>
+    <title>ESP32 Stream Cheap Deck Mini Macro Keyboard Flasher</title>
     <script src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module" type="module"></script>
     <style>
         * {
@@ -136,6 +136,16 @@
             margin-bottom: 10px;
             line-height: 1.6;
         }
+
+        .instructions .note {
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: #555;
+            font-style: italic;
+            margin-top: 0.5em;
+            padding-left: 1em;
+        }
+
         
         .hidden {
             display: none;
@@ -144,7 +154,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>🎮 ESP32 Stream Deck Flasher</h1>
+        <h1>ESP32 Stream Cheap Deck Mini Macro Keyboard Flasher</h1>
         <p class="subtitle">Flash your ESP32-C3 or ESP32-S3 in seconds</p>
         
         <div class="warning">
@@ -167,17 +177,21 @@
             <button slot="activate">Connect and Flash</button>
         </esp-web-install-button>
         
-        <div class="instructions">
-            <h3>📝 How to Use:</h3>
+      <div class="instructions">
+            <h3>📝 How to Use</h3>
             <ol>
-                <li>Select your board type above (ESP32-C3 or ESP32-S3)</li>
-                <li>Click "Connect and Flash"</li>
-                <li>Select your ESP32 from the popup</li>
-                <li>Wait for flashing to complete (about 30 seconds)</li>
-                <li>Open "Logs and Console" - Click "Reset Device"</li>
-                <li>Connect via Bluetooth to "Super Keys"</li>
+                <li><strong>Select your board type</strong> (ESP32-C3 or ESP32-S3) from the dropdown above.</li>
+                <li><strong>Click “Connect & Flash”</strong> to start the upload process.</li>
+                <li>When prompted, choose your <strong>ESP32 device</strong> from the pop-up list.</li>
+                <li>Wait about <strong>30 seconds</strong> for the flashing process to complete.</li>
+                <li>Open <strong>“Logs & Console”</strong>, then click <strong>“Reset Device”</strong>.</li>
+                <li>On your computer, <strong>pair via Bluetooth</strong> with <em>“Super Keys”</em>.</li>
             </ol>
-        </div>
+            <p class="note">
+                💡 <em>Having trouble connecting?</em><br>
+                Forget the old “Super Keys” device, toggle Bluetooth off and on, then pair again.
+            </p>
+       </div>
         
         <div class="instructions" style="margin-top: 20px;">
             <h3>🎹 Default Key Mappings:</h3>
