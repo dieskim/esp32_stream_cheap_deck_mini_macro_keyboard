@@ -1,235 +1,684 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ESP32 Stream Cheap Deck Mini Macro Keyboard Flasher</title>
     <script src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module" type="module"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px;
         }
-        
-        .container {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 600px;
-            width: 100%;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        .container { background: white; border-radius: 20px; padding: 40px; max-width: 800px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        h1 { color: #333; margin-bottom: 10px; font-size: 28px; }
+        .subtitle { color: #666; margin-bottom: 30px; font-size: 14px; }
+        .warning { background: #fff3cd; border: 1px solid #ffc107; border-radius: 8px; padding: 15px; margin-bottom: 20px; font-size: 14px; color: #856404; }
+        .info { background: #e7f3ff; border: 1px solid #2196F3; border-radius: 8px; padding: 2px; margin-bottom: 20px; font-size: 14px; color: #0d47a1; }
+        .success { background: #d4edda; border: 1px solid #28a745; border-radius: 8px; padding: 15px; margin-bottom: 20px; font-size: 14px; color: #155724; display: none; }
+        .success.show { display: block; }
+        .board-select { margin-bottom: 30px; }
+        .board-select label { display: block; font-weight: 600; color: #333; margin-bottom: 10px; font-size: 16px; }
+        select, input[type="text"] {
+            width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; transition: border-color 0.3s;
+            font-family: 'Courier New', monospace;
         }
-        
-        h1 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 28px;
-        }
-        
-        .subtitle {
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 14px;
-        }
-        
-        .warning {
-            background: #fff3cd;
-            border: 1px solid #ffc107;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            color: #856404;
-        }
-        
-        .info {
-            background: #e7f3ff;
-            border: 1px solid #2196F3;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            color: #0d47a1;
-        }
-        
-        .board-select {
-            margin-bottom: 30px;
-        }
-        
-        .board-select label {
-            display: block;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 16px;
-        }
-        
-        select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: border-color 0.3s;
-        }
-        
-        select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        esp-web-install-button {
-            display: block;
-            margin: 20px 0;
-        }
-        
+        select:focus, input[type="text"]:focus { outline: none; border-color: #667eea; }
+        esp-web-install-button { display: block; margin: 20px 0; }
         esp-web-install-button button {
-            background: #667eea !important;
-            color: white !important;
-            border: none !important;
-            padding: 15px 30px !important;
-            border-radius: 8px !important;
-            font-size: 16px !important;
-            font-weight: 600 !important;
-            cursor: pointer !important;
-            transition: all 0.3s !important;
-            width: 100% !important;
+            background: #667eea !important; color: white !important; border: none !important; padding: 15px 30px !important; border-radius: 8px !important;
+            font-size: 16px !important; font-weight: 600 !important; cursor: pointer !important; transition: all 0.3s !important; width: 100% !important;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
         }
-        
-        esp-web-install-button button:hover {
-            background: #5568d3 !important;
-            transform: translateY(-2px) !important;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4) !important;
-        }
-        
-        .instructions {
-            background: #f5f5f5;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 30px;
-        }
-        
-        .instructions h3 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-        
-        .instructions ol {
-            margin-left: 20px;
-        }
-        
-        .instructions li {
-            color: #666;
-            margin-bottom: 10px;
-            line-height: 1.6;
-        }
+        esp-web-install-button button:hover { background: #5568d3 !important; transform: translateY(-2px) !important; box-shadow: 0 5px 15px rgba(102,126,234,0.4) !important; }
+        .config-section { margin-top: 30px; padding: 20px; background: #f5f5f5; border-radius: 8px; display: none; }
+        .config-section h3 { color: #333; margin-bottom: 15px; font-size: 18px; }
+        .key-item { margin-bottom: 20px; }
+        .key-item label { display: block; font-weight: 600; color: #333; margin-bottom: 5px; font-size: 14px; }
+        .key-item input[type="text"] { margin-top: 5px; }
+        .key-item .hint { font-size: 11px; color: #888; margin-top: 3px; font-style: italic; }
+        .examples { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 12px; margin: 15px 0; font-size: 12px; }
+        .examples strong { display: block; margin-bottom: 8px; color: #333; }
+        .examples code { display: inline-block; background: #f8f9fa; padding: 4px 8px; margin: 3px 6px 3px 0; border-radius: 3px; font-family: 'Courier New', monospace; color: #667eea; }
+        .button-group { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+        .button-group button { flex: 1; min-width: 140px; }
+        button.secondary { background: #667eea; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        button.secondary:hover:not(:disabled) { background: #5568d3; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,0.4); }
+        button.secondary:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        button.toggle { background: #6c757d; width: 100%; margin-bottom: 20px; }
+        button.toggle:hover:not(:disabled) { background: #5a6268; }
+        .instructions { background: #f5f5f5; border-radius: 8px; padding: 20px; margin-top: 30px; }
+        .instructions h3 { color: #333; margin-bottom: 15px; font-size: 18px; }
+        .instructions ol { margin-left: 20px; }
+        .instructions li { color: #666; margin-bottom: 10px; line-height: 1.6; }
+        .instructions .note { font-family: inherit; font-size: 0.95rem; color: #555; font-style: italic; margin-top: 0.5em; padding-left: 1em; }
+        .console { background: #1e1e1e; color: #00ff00; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 12px; max-height: 300px; overflow-y: auto; margin-top: 20px; display: block; }
+        .console-line { margin-bottom: 3px; word-wrap: break-word; }
+        .console-line.sent { color: #4fc3f7; }
+        .console-line.received { color: #00ff00; }
+        .console-line.error { color: #ff5252; }
+        .console-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .console-header h4 { color: #00ff00; font-size: 14px; }
+        .console-header button { background: #333; color: #00ff00; border: 1px solid #00ff00; padding: 5px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; }
+        .console-header button:hover { background: #444; }
+    .key-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
 
-        .instructions .note {
-            font-family: inherit;
-            font-size: 0.95rem;
-            color: #555;
-            font-style: italic;
-            margin-top: 0.5em;
-            padding-left: 1em;
-        }
+.key-row {
+  display: flex;
+  gap: 10px;
+}
 
-        
-        .hidden {
-            display: none;
-        }
+.key {
+  background: #f8f8f8;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px 14px;
+  text-align: center;
+  min-width: 160px;
+  max-width: 160px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  word-wrap: break-word;
+}
+
+.keycap {
+  font-weight: 700;
+  font-size: 13px;
+  color: #333;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 6px 4px;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.keylabel {
+  font-size: 11px;
+  color: #666;
+}
+
     </style>
 </head>
 <body>
     <div class="container">
         <h1>ESP32 Stream Cheap Deck Mini Macro Keyboard Flasher</h1>
         <p class="subtitle">Flash your ESP32-C3 or ESP32-S3 in seconds</p>
-        
-        <div class="warning">
-            ⚠️ <strong>Chrome/Edge only!</strong> This tool requires Web Serial API.
-        </div>
-        
-        <div class="info">
-            💡 <strong>First time?</strong> Hold the BOOT button while plugging in the USB cable if the device isn't detected.
-        </div>
-        
+
+        <div class="warning">⚠️ <strong>Chrome/Edge only!</strong> This tool requires Web Serial API.</div>
+        <div class="info">💡 <strong>First time?</strong> Hold the BOOT button while plugging in the USB cable if the device isn't detected.</div>
+        <div class="success" id="successMessage">✅ <strong>Success!</strong> Firmware flashed successfully!</div>
+
         <div class="board-select">
             <label for="boardType">Select Your Board:</label>
             <select id="boardType">
                 <option value="esp32c3">ESP32-C3</option>
-                <option value="esp32s3">ESP32-S3</option>
+                <option value="esp32s3" disabled>ESP32-S3</option>
             </select>
         </div>
-        
+
         <esp-web-install-button id="installButton">
             <button slot="activate">Connect and Flash</button>
         </esp-web-install-button>
-        
-      <div class="instructions">
+
+        <!-- Connect button lives outside config; config shows only when connected -->
+        <button class="secondary toggle" id="connectConfigBtn">Connect and Configure</button>
+
+        <div class="config-section" id="configSection" style="display:none;">
+            <h3>🎹 Configure Key Mappings</h3>
+            <p style="color:#666;font-size:14px;margin-bottom:15px;">
+                After connecting, you can view & set your F-keys below and save them to your device.
+            </p>
+
+            <div id="keyConfigForm">
+              <div class="examples">
+                <strong>💡 Key Options:</strong>
+                <code>F1 - F24</code>
+                <code>CTRL</code>
+                <code>ALT</code>
+                <code>SHIFT</code>
+                <code>GUI</code>
+
+                <strong style="display:block;margin-top:10px;">💡 Key Combo Examples:</strong>
+                <code>CTRL+F13</code>
+                <code>ALT+SHIFT+F14</code>
+                <code>CTRL+ALT+GUI+F19</code>
+
+                <p style="margin-top:8px;color:#666;font-size:11px;line-height:1.5;">
+                    You can use single function keys or combine with modifiers: CTRL, ALT, SHIFT, GUI (CMD/WIN).<br>
+                    <em>(UI maps firmware codes like 240 → F13.)</em>
+                </p>
+                </div>
+
+                <div class="key-item">
+                    <label>Button 1:</label>
+                    <input type="text" class="key-input" data-button="0" value="F13" placeholder="F1–F24 (Optional Combo)" />
+                </div>
+                <div class="key-item">
+                    <label>Button 2:</label>
+                    <input type="text" class="key-input" data-button="1" value="F14" placeholder="F1–F24 (Optional Combo)" />
+                </div>
+                <div class="key-item">
+                    <label>Button 3:</label>
+                    <input type="text" class="key-input" data-button="2" value="F15" placeholder="F1–F24 (Optional Combo)" />
+                </div>
+                <div class="key-item">
+                    <label>Button 4:</label>
+                    <input type="text" class="key-input" data-button="3" value="F16" placeholder="F1–F24 (Optional Combo)" />
+                </div>
+                <div class="key-item">
+                    <label>Button 5:</label>
+                    <input type="text" class="key-input" data-button="4" value="F17" placeholder="F1–F24 (Optional Combo)" />
+                </div>
+                <div class="key-item">
+                    <label>Button 6:</label>
+                    <input type="text" class="key-input" data-button="5" value="F18" placeholder="F1–F24 (Optional Combo)" />
+                </div>
+                <div class="key-item">
+                    <label>Button 7:</label>
+                    <input type="text" class="key-input" data-button="6" value="F19" placeholder="F1–F24 (Optional Combo)" />
+                </div>
+                <div class="key-item">
+                    <label>Button 8 :</label>
+                    <input type="text" class="key-input" data-button="7" value="CTRL+ALT+GUI+F19" placeholder="F1–F24 (Optional Combo)" />
+                </div>
+
+                <div class="button-group">
+                    <button class="secondary" id="saveConfigBtn">Save to Device</button>
+                    <button class="secondary" id="resetConfigBtn">Reset to Defaults</button>
+                    <button class="secondary" id="disconnectConfigBtn" style="background:#dc3545;">Disconnect</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="instructions">
             <h3>📝 How to Use</h3>
             <ol>
                 <li><strong>Select your board type</strong> (ESP32-C3 or ESP32-S3) from the dropdown above.</li>
-                <li><strong>Click “Connect & Flash”</strong> to start the upload process.</li>
+                <li><strong>Click "Connect & Flash"</strong> to start the upload process.</li>
                 <li>When prompted, choose your <strong>ESP32 device</strong> from the pop-up list.</li>
                 <li>Wait about <strong>30 seconds</strong> for the flashing process to complete.</li>
-                <li>Open <strong>“Logs & Console”</strong>, then click <strong>“Reset Device”</strong>.</li>
-                <li>On your computer, <strong>pair via Bluetooth</strong> with <em>“Super Keys”</em>.</li>
+                <li>Open <strong>"Logs & Console"</strong>, then click <strong>"Reset Device"</strong>.</li>
+                <li><strong>(Optional)</strong> Click "Connect for Configuration", customize your keys, and save to device.</li>
+                <li>On your computer, <strong>pair via Bluetooth</strong> with <em>"Super Keys"</em>.</li>
             </ol>
             <p class="note">
-                💡 <em>Having trouble connecting?</em><br>
-                Forget the old “Super Keys” device, toggle Bluetooth off and on, then pair again.
+                💡 <em>Having trouble connecting?</em><br />
+                Forget the old "Super Keys" device, toggle Bluetooth off and on, then pair again.
             </p>
-       </div>
-        
+        </div>
+
         <div class="instructions" style="margin-top: 20px;">
             <h3>🎹 Default Key Mappings:</h3>
-            <ul style="list-style: none; margin-left: 0;">
-                <li>Button 1 (Top Left): F13</li>
-                <li>Button 2: F14</li>
-                <li>Button 3: F15</li>
-                <li>Button 4 (Top Right): F16</li>
-                <li>Button 5 (Bottom Left): F17</li>
-                <li>Button 6: F18</li>
-                <li>Button 7: F19</li>
-                <li>Button 8 (Bottom Right): Cmd+Option+Ctrl+F19</li>
-            </ul>
-        </div>
+            <div class="key-grid">
+                <div class="key-row">
+                <div class="key">
+                    <div class="keycap">F13</div>
+                    <div class="keylabel">Button 1</div>
+                </div>
+                <div class="key">
+                    <div class="keycap">F14</div>
+                    <div class="keylabel">Button 2</div>
+                </div>
+                <div class="key">
+                    <div class="keycap">F15</div>
+                    <div class="keylabel">Button 3</div>
+                </div>
+                <div class="key">
+                    <div class="keycap">F16</div>
+                    <div class="keylabel">Button 4</div>
+                </div>
+                </div>
+                <div class="key-row">
+                <div class="key">
+                    <div class="keycap">F17</div>
+                    <div class="keylabel">Button 5</div>
+                </div>
+                <div class="key">
+                    <div class="keycap">F18</div>
+                    <div class="keylabel">Button 6</div>
+                </div>
+                <div class="key">
+                    <div class="keycap">F19</div>
+                    <div class="keylabel">Button 7</div>
+                </div>
+                <div class="key">
+                    <div class="keycap">Ctrl+Alt+GUI+F19</div>
+                    <div class="keylabel">Button 8</div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div class="console" id="console">
+                <div class="console-header">
+                    <h4>📟 Device Console</h4>
+                    <button id="clearConsole">Clear</button>
+                </div>
+                <div id="consoleOutput"></div>
+            </div>
     </div>
 
     <script>
+        // ======== F-KEY MAPPING HELPERS ========
+        const F_DEC_TO_NAME = {};
+        const F_NAME_TO_KEYNAME = {};
+
+        // F1–F12 = 194–205
+        for (let i = 1; i <= 12; i++) {
+        const code = 193 + i; // 194–205
+        F_DEC_TO_NAME[code] = `F${i}`;
+        F_NAME_TO_KEYNAME[`F${i}`] = `KEY_F${i}`;
+        }
+
+        // F13–F24 = 240–251
+        for (let i = 13; i <= 24; i++) {
+        const code = 240 + (i - 13); // 240–251
+        F_DEC_TO_NAME[code] = `F${i}`;
+        F_NAME_TO_KEYNAME[`F${i}`] = `KEY_F${i}`;
+        }
+
+        function toPrettyFKey(value) {
+        const n = Number(String(value).trim());
+        return Number.isFinite(n) && F_DEC_TO_NAME[n]
+            ? F_DEC_TO_NAME[n]
+            : `Unknown (${value})`;
+        }
+
+        function toFirmwareKeyName(input) {
+            const s = String(input).trim().toUpperCase();
+            if (!s) return null;
+
+            // Split by '+' to support combos like CTRL+ALT+CMD+F19
+            const parts = s.split('+').map(p => p.trim()).filter(Boolean);
+
+            // Accept both Windows and Mac naming variants
+            const synonyms = {
+                CMD: 'GUI',
+                WIN: 'GUI',
+                WINDOWS: 'GUI',
+            };
+
+            const modifiers = ['CTRL', 'ALT', 'SHIFT', 'GUI'];
+            const detected = { CTRL: false, ALT: false, SHIFT: false, GUI: false };
+            let fkey = null;
+
+            for (const part of parts) {
+                const normalized = synonyms[part] || part;
+                if (modifiers.includes(normalized)) detected[normalized] = true;
+                else if (/^F\d{1,2}$/.test(normalized)) fkey = normalized;
+            }
+
+            if (!fkey) return null;
+            if (!F_NAME_TO_KEYNAME[fkey]) return null;
+
+            // Build firmware token
+            let token = F_NAME_TO_KEYNAME[fkey];
+            const prefix = [];
+            if (detected.CTRL) prefix.push('CTRL');
+            if (detected.SHIFT) prefix.push('SHIFT');
+            if (detected.ALT) prefix.push('ALT');
+            if (detected.GUI) prefix.push('GUI');
+
+            if (prefix.length) token = prefix.join('+') + '+' + token;
+            return token;
+            }
+
+
+
+        // ======== ELEMENTS ========
         const installButton = document.getElementById('installButton');
         const boardSelect = document.getElementById('boardType');
-        
-        // Manifest URLs for each board
+        const successMessage = document.getElementById('successMessage');
+
+        const connectConfigBtn = document.getElementById('connectConfigBtn');
+        const configSection = document.getElementById('configSection');
+
+        const saveConfigBtn = document.getElementById('saveConfigBtn');
+        const resetConfigBtn = document.getElementById('resetConfigBtn');
+        const disconnectConfigBtn = document.getElementById('disconnectConfigBtn');
+
+        const consoleOutput = document.getElementById('consoleOutput');
+        const clearConsoleBtn = document.getElementById('clearConsole');
+
+        // ======== SERIAL STATE ========
+        let configPort = null;
+
+        // Reader pipeline
+        let textDecoder = null;
+        let readableStreamClosed = null;
+        let configReader = null;
+
+        // Writer pipeline
+        let textEncoder = null;
+        let writableStreamClosed = null;
+        let configWriter = null;
+
+        let readLoopActive = false;
+        let disconnecting = false;
+
+        function logToConsole(message, type = 'info') {
+            const line = document.createElement('div');
+            line.className = `console-line ${type}`;
+            const timestamp = new Date().toLocaleTimeString();
+            line.textContent = `[${timestamp}] ${message}`;
+            consoleOutput.appendChild(line);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+        logToConsole('Ready. Click "Connect and Configure" to begin.', 'info');
+
+        clearConsoleBtn.addEventListener('click', () => { consoleOutput.innerHTML = ''; });
+
         const manifests = {
             esp32c3: './firmware/esp32c3/manifest.json',
             esp32s3: './firmware/esp32s3/manifest.json'
         };
-        
-        // Update manifest when board selection changes
-        boardSelect.addEventListener('change', () => {
-            const selectedBoard = boardSelect.value;
-            installButton.manifest = manifests[selectedBoard];
+        boardSelect.addEventListener('change', (e) => {
+            installButton.manifest = manifests[e.target.value];
         });
-        
-        // Set initial manifest
         installButton.manifest = manifests.esp32c3;
-        
-        // Optional: Add event listeners for flash progress
+
         installButton.addEventListener('state-changed', (ev) => {
-            console.log('State:', ev.detail);
+            if (ev.detail.state === 'INSTALLED') successMessage.classList.add('show');
+        });
+
+        async function sendCommand(command) {
+            if (!configWriter) { logToConsole('Error: No serial connection', 'error'); return; }
+            await configWriter.write(command + '\n');
+            logToConsole(`→ ${command}`, 'sent');
+        }
+
+        async function startReadLoop() {
+            if (!configReader || readLoopActive) return;
+            readLoopActive = true;
+
+            let buffer = '';
+            try {
+                logToConsole('Read loop started, listening for data...', 'info');
+                while (readLoopActive && configReader) {
+                const { value, done } = await configReader.read();
+                if (done) {
+                    logToConsole('Serial connection closed', 'error');
+                    readLoopActive = false;
+                    break;
+                }
+                if (value) {
+                    buffer += value;
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop() || '';
+
+                    for (let line of lines) {
+                    line = line.trim();
+                    if (!line) continue;
+
+                    logToConsole(`← ${line}`, 'received');
+
+                    if (line.startsWith('KEY:')) {
+                        const parts = line.split(':');
+
+                        // expected: KEY:<index>:<code>:<mods>
+                        if (parts.length >= 4) {
+                        const buttonIndex = parseInt(parts[1], 10);
+                        const rawCode = Number(parts[2]);
+                        const mods = parts[3].trim();
+
+                        const base = F_DEC_TO_NAME[rawCode] || `Unknown (${rawCode})`;
+                        let display = base;
+
+                        if (mods && mods !== '-' && mods !== '') {
+                            // clean up duplicate plus signs / trailing +
+                            const modPretty = mods
+                            .replace(/\+$/, '')
+                            .replace(/\+\+/g, '+')
+                            .replace(/GUI/g, 'GUI')
+                            .replace(/CMD/g, 'CMD')
+                            .replace(/WIN/g, 'WIN')
+                            .replace(/SHIFT/g, 'SHIFT')
+                            .replace(/CTRL/g, 'CTRL')
+                            .replace(/ALT/g, 'ALT');
+
+                            display = `${modPretty}+${base}`;
+                        }
+
+                        const input = document.querySelector(
+                            `input[data-button="${buttonIndex}"]`
+                        );
+                        if (input) {
+                            input.value = display;
+                            logToConsole(
+                            `✓ Updated Button ${buttonIndex + 1} to: ${display}`,
+                            'info'
+                            );
+                        }
+                        } else if (parts.length >= 3) {
+                        // old format: KEY:<index>:<code>
+                        const buttonIndex = parseInt(parts[1], 10);
+                        const rawVal = parts[2];
+                        const pretty = toPrettyFKey(rawVal);
+                        const input = document.querySelector(
+                            `input[data-button="${buttonIndex}"]`
+                        );
+                        if (input) {
+                            input.value = pretty;
+                            logToConsole(
+                            `✓ Updated Button ${buttonIndex + 1} to: ${pretty}`,
+                            'info'
+                            );
+                        }
+                        }
+                    }
+                    }
+                }
+                await new Promise((r) => setTimeout(r, 10));
+                }
+            } catch (e) {
+                if (!disconnecting) {
+                logToConsole(`Read error: ${e.message}`, 'error');
+                logToConsole(`Stack: ${e.stack}`, 'error');
+                }
+                readLoopActive = false;
+            }
+            logToConsole('Read loop stopped', 'info');
+            }
+
+
+        // CONNECT
+        connectConfigBtn.addEventListener('click', async () => {
+            try {
+                logToConsole('Requesting serial port...', 'info');
+                await navigator.serial.getPorts();
+                const port = await navigator.serial.requestPort();
+
+                logToConsole('Opening serial port at 115200 baud...', 'info');
+                await port.open({ baudRate: 115200, dataBits: 8, stopBits: 1, parity: 'none', flowControl: 'none' });
+                logToConsole('✓ Serial port opened!', 'info');
+
+                // Reader pipeline: port.readable -> TextDecoderStream -> reader
+                if (port.readable) {
+                    textDecoder = new TextDecoderStream();
+                    readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
+                    configReader = textDecoder.readable.getReader();
+                } else {
+                    logToConsole('ERROR: Port not readable!', 'error');
+                }
+
+                // Writer pipeline: TextEncoderStream -> port.writable
+                if (port.writable) {
+                    textEncoder = new TextEncoderStream();
+                    writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
+                    configWriter = textEncoder.writable.getWriter();
+                } else {
+                    logToConsole('ERROR: Port not writable!', 'error');
+                }
+
+                configPort = port;
+
+                // Show config UI, hide connect button
+                connectConfigBtn.style.display = 'none';
+                configSection.style.display = 'block';
+
+                startReadLoop();
+
+                await new Promise(resolve => setTimeout(resolve, 1200));
+                await sendCommand('GET_CONFIG');
+
+                logToConsole('If you see no response, reset the device or replug USB.', 'info');
+            } catch (e) {
+                logToConsole(`Connection error: ${e.message}`, 'error');
+                logToConsole(`Error stack: ${e.stack}`, 'error');
+                alert('Failed to connect. Make sure:\n1) The device is plugged in\n2) No other app uses the port\n3) You selected the correct port');
+            }
+        });
+
+        // DISCONNECT (under the keys)
+        disconnectConfigBtn.addEventListener('click', async () => {
+            if (!configPort && !configReader && !configWriter) {
+                // Already disconnected UI-wise
+                configSection.style.display = 'none';
+                connectConfigBtn.style.display = 'block';
+                return;
+            }
+            try {
+                disconnecting = true;
+                logToConsole('Disconnecting...', 'info');
+                readLoopActive = false;
+
+                // Stop reader cleanly
+                if (configReader) {
+                    try { await configReader.cancel(); } catch {}
+                    try { configReader.releaseLock(); } catch {}
+                    configReader = null;
+                }
+                if (readableStreamClosed) {
+                    try { await readableStreamClosed; } catch {}
+                    readableStreamClosed = null;
+                }
+                if (textDecoder) {
+                    try { textDecoder.readable.cancel(); } catch {}
+                    textDecoder = null;
+                }
+
+                // Stop writer cleanly
+                if (configWriter) {
+                    try { await configWriter.close(); } catch {}
+                    try { configWriter.releaseLock(); } catch {}
+                    configWriter = null;
+                }
+                if (writableStreamClosed) {
+                    try { await writableStreamClosed; } catch {}
+                    writableStreamClosed = null;
+                }
+                if (textEncoder) {
+                    try { textEncoder.readable.cancel(); } catch {}
+                    textEncoder = null;
+                }
+
+                // Finally close the port
+                if (configPort) {
+                    try { await configPort.close(); } catch {}
+                    configPort = null;
+                }
+
+                // Hide the entire Configure Key Mappings section and re-show connect button
+                configSection.style.display = 'none';
+                connectConfigBtn.style.display = 'block';
+
+                logToConsole('✓ Disconnected', 'info');
+            } catch (e) {
+                logToConsole(`Disconnect error: ${e.message}`, 'error');
+            } finally {
+                disconnecting = false;
+            }
+        });
+
+        // SAVE (F13–F24 only for buttons 0..6)
+        saveConfigBtn.addEventListener('click', async () => {
+            if (!configWriter) { alert('Please connect to device first!'); return; }
+
+            saveConfigBtn.disabled = true;
+            saveConfigBtn.textContent = 'Saving...';
+
+            try {
+                logToConsole('Starting configuration save...', 'info');
+                await sendCommand('CONFIG_START');
+                await new Promise(resolve => setTimeout(resolve, 400));
+
+                const inputs = document.querySelectorAll('.key-input');
+                for (let input of inputs) {
+                    const buttonIndex = parseInt(input.dataset.button, 10);
+                    const typed = input.value.trim();
+
+                    if (buttonIndex >= 0 && buttonIndex <= 6) {
+                        const fwToken = toFirmwareKeyName(typed);
+                        if (!fwToken) {
+                            logToConsole(`Skipping Button ${buttonIndex + 1}: unsupported "${typed}" (F13–F24 only)`, 'error');
+                            continue;
+                        }
+                        logToConsole(`Setting Button ${buttonIndex + 1} to: ${fwToken}`, 'info');
+                        await sendCommand(`SET_KEY:${buttonIndex}:${fwToken}`);
+                        await new Promise(r => setTimeout(r, 250));
+                    } else {
+                        // Button 8 passthrough (still logged)
+                        logToConsole(`Setting Button ${buttonIndex + 1} (special) to: ${typed}`, 'info');
+                        await sendCommand(`SET_KEY:${buttonIndex}:${typed}`);
+                        await new Promise(r => setTimeout(r, 250));
+                    }
+                }
+
+                logToConsole('Finalizing configuration...', 'info');
+                await sendCommand('CONFIG_END');
+                await new Promise(resolve => setTimeout(resolve, 800));
+
+                logToConsole('Refreshing configuration from device...', 'info');
+                await sendCommand('GET_CONFIG');
+
+                logToConsole('✓ Configuration saved successfully!', 'info');
+                alert('✅ Configuration saved successfully! Stored on device.');
+            } catch (e) {
+                logToConsole(`Save error: ${e.message}`, 'error');
+                alert('Failed to save configuration. Please try again.');
+            }
+
+            saveConfigBtn.disabled = false;
+            saveConfigBtn.textContent = 'Save to Device';
+        });
+
+        // RESET (and re-read)
+        resetConfigBtn.addEventListener('click', async () => {
+            if (!configWriter) { alert('Please connect to device first!'); return; }
+            if (!confirm('Reset all keys to default values?')) return;
+
+            resetConfigBtn.disabled = true;
+            resetConfigBtn.textContent = 'Resetting...';
+
+            try {
+                logToConsole('Resetting to default configuration...', 'info');
+                await sendCommand('CONFIG_RESET');
+
+                await new Promise(resolve => setTimeout(resolve, 1200));
+
+                logToConsole('Requesting config after reset...', 'info');
+                await sendCommand('GET_CONFIG');
+
+                const inputs = document.querySelectorAll('.key-input');
+                const defaults = ['F13', 'F14', 'F15', 'F16', 'F17', 'F18', 'F19', 'CTRL+ALT+GUI+F19'];
+                inputs.forEach((input, i) => { input.value = defaults[i]; });
+
+                logToConsole('✓ Reset to defaults complete and verified!', 'info');
+                alert('✅ Keys reset to default values! (UI refreshed from device.)');
+            } catch (e) {
+                logToConsole(`Reset error: ${e.message}`, 'error');
+                alert('Failed to reset. Please try again.');
+            }
+
+            resetConfigBtn.disabled = false;
+            resetConfigBtn.textContent = 'Reset to Defaults';
         });
     </script>
 </body>
