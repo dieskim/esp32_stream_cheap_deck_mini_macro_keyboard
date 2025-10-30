@@ -8,7 +8,6 @@
 
 ## 🚀 Quick Flash Guide
 
-You no longer need to set up Arduino manually.  
 Just open the web flasher below and follow the on-screen steps:
 
 👉 **[Open the Web Flasher](https://dieskim.github.io/esp32_stream_cheap_deck_mini_macro_keyboard/)**
@@ -39,7 +38,7 @@ You can:
 ---
 
 ## 🛠️ Advanced / Manual Setup
-If you prefer flashing via Arduino IDE, you can still follow the [manual installation guide here](https://github.com/dieskim/esp32_stream_cheap_deck_mini_macro_keyboard/wiki/Manual-Setup).
+If you prefer flashing via Arduino IDE, you can still download the Arduino Sketch and Manually Flash it.
 
 ---
 
