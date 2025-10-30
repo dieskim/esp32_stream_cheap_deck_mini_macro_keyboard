@@ -1,5 +1,19 @@
 #include <BleKeyboard.h>
 #include <Preferences.h>
+#include <NimBLEDevice.h>
+
+// Detect board type at compile time
+#if defined(CONFIG_IDF_TARGET_ESP32S3)
+  #define IS_ESP32_S3 true
+  #include <Adafruit_NeoPixel.h>
+  #define RGB_LED_PIN 48
+  Adafruit_NeoPixel rgbLed(1, RGB_LED_PIN, NEO_GRB + NEO_KHZ800);
+#elif defined(CONFIG_IDF_TARGET_ESP32C3)
+  #define IS_ESP32_S3 false
+  #define BLUE_LED 8
+#else
+  #error "Unsupported board type"
+#endif
 
 BleKeyboard bleKeyboard("Super Keys", "ESP32", 100);
 Preferences preferences;
@@ -7,16 +21,11 @@ Preferences preferences;
 // BUTTONS WHEN LOOKING FROM FRONT
 // TOP LEFT     1 2 3 4     TOP RIGHT
 // BOTTOM LEFT  5 6 7 8     BOTTOM RIGHT
-const uint8_t buttonPins[] = {
-  20,  // Button 1
-  9,   // Button 2
-  2,   // Button 3
-  1,   // Button 4
-  21,  // Button 5
-  10,  // Button 6
-  3,   // Button 7
-  0    // Button 8
-};
+#if IS_ESP32_S3
+  const uint8_t buttonPins[] = {1, 2, 13, 4, 5, 6, 7, 8};
+#else
+  const uint8_t buttonPins[] = {20, 9, 2, 1, 21, 10, 3, 0};
+#endif
 
 const uint8_t numButtons = sizeof(buttonPins) / sizeof(buttonPins[0]);
 const char* buttonNames[] = {
@@ -25,7 +34,6 @@ const char* buttonNames[] = {
 };
 
 // ───────────────────────────────────────────────
-// Structs for combo and config
 struct KeyCombo {
   uint8_t keyCode;
   bool ctrl;
@@ -44,13 +52,31 @@ struct KeyConfig {
 
 KeyConfig keyMappings[numButtons];
 
-// ───────────────────────────────────────────────
-#define BLUE_LED 8
-
 bool lastButtonStates[numButtons];
 bool lastConnected = false;
 bool configMode = false;
 String configBuffer = "";
+
+// ───────────────────────────────────────────────
+// LED Control Functions
+void setLED(uint8_t r, uint8_t g, uint8_t b) {
+#if IS_ESP32_S3
+  rgbLed.setPixelColor(0, rgbLed.Color(r, g, b));
+  rgbLed.show();
+#else
+  // C3 only has blue LED - turn on if any color requested
+  digitalWrite(BLUE_LED, (r || g || b) ? LOW : HIGH);
+#endif
+}
+
+void flashLED(int times, int delayMs, uint8_t r = 0, uint8_t g = 0, uint8_t b = 255) {
+  for (int i = 0; i < times; i++) {
+    setLED(r, g, b);
+    delay(delayMs);
+    setLED(0, 0, 0);
+    delay(delayMs);
+  }
+}
 
 // ───────────────────────────────────────────────
 KeyCombo parseKeyCombo(String combo) {
@@ -75,16 +101,6 @@ KeyCombo parseKeyCombo(String combo) {
   }
 
   return kc;
-}
-
-// ───────────────────────────────────────────────
-void flashBlue(int times, int delayMs) {
-  for (int i = 0; i < times; i++) {
-    digitalWrite(BLUE_LED, LOW);
-    delay(delayMs);
-    digitalWrite(BLUE_LED, HIGH);
-    delay(delayMs);
-  }
 }
 
 // ───────────────────────────────────────────────
@@ -227,10 +243,25 @@ void handleConfigCommand(String cmd) {
 // ───────────────────────────────────────────────
 void setup() {
   Serial.begin(115200);
-  Serial.println("Startup...");
+  
+  // USB CDC stability improvement for both boards
+  Serial.setTxTimeoutMs(0);
+  while (!Serial && millis() < 1500) delay(10);
 
+#if IS_ESP32_S3
+  Serial.println("USB CDC ready (ESP32-S3)");
+  
+  // Initialize RGB LED
+  rgbLed.begin();
+  rgbLed.setBrightness(50);
+  setLED(0, 0, 0);
+#else
+  Serial.println("Starting (ESP32-C3)");
   pinMode(BLUE_LED, OUTPUT);
   digitalWrite(BLUE_LED, HIGH);
+#endif
+
+  Serial.println("Startup...");
 
   loadKeyMappings();
   bleKeyboard.begin();
@@ -255,22 +286,40 @@ void loop() {
     }
   }
 
-  if (!bleKeyboard.isConnected()) {
-    digitalWrite(BLUE_LED, LOW);
-    delay(500);
-    digitalWrite(BLUE_LED, HIGH);
-    delay(500);
+  bool connected = bleKeyboard.isConnected();
+  static uint32_t lastAdvKick = 0;
+  static uint32_t lastBlink = 0;
+
+  if (!connected) {
     if (lastConnected) {
       Serial.println("Bluetooth disconnected.");
+      bleKeyboard.releaseAll();
       lastConnected = false;
     }
+    
+    // Kick advertising periodically for better reconnection
+    uint32_t now = millis();
+    if (now - lastAdvKick > 2000) {
+      lastAdvKick = now;
+      NimBLEDevice::startAdvertising();
+    }
+    
+    // Blink LED while disconnected
+    if (now - lastBlink > 500) {
+      lastBlink = now;
+      static bool ledState = false;
+      ledState = !ledState;
+      setLED(0, 0, ledState ? 50 : 0);
+    }
+    
+    delay(100);
     return;
   }
 
   if (!lastConnected) {
     Serial.println("Bluetooth connected!");
-    flashBlue(5, 100);
-    digitalWrite(BLUE_LED, HIGH);
+    flashLED(5, 100, 0, 255, 0); // Green flash on S3, blue on C3
+    setLED(0, 0, 0);
     lastConnected = true;
   }
 
