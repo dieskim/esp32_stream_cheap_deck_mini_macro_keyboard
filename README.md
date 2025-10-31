@@ -2,10 +2,17 @@
 
 [![ESP32 Stream Deck](https://raw.githubusercontent.com/dieskim/esp32_stream_cheap_deck_mini_macro_keyboard/refs/heads/main/ESP32-Supermini-Stream-Cheap-Deck-Mini-Macro-Keyboard.jpg)](https://dieskim.github.io/esp32_stream_cheap_deck_mini_macro_keyboard/)
 
+### 🧰 3D Printed Case, Build Instructions & STLs
 
-**3D Printed Case:** [Download on MakerWorld](https://makerworld.com/en/models/1899311-esp32-stream-cheap-deck-bluetooth-macro-keyboard)
+<a href="https://makerworld.com/en/models/1899311-esp32-stream-cheap-deck-bluetooth-macro-keyboard" target="_blank">
+  <img src="https://cdn-forum.bambulab.com/original/3X/c/1/c1eda64c15dd27c7754e4f567d633b2a72cd387c.png" alt="Download & Build on MakerWorld" width="220">
+</a>
 
----
+### ☕ Support Me
+
+<a href="https://www.buymeacoffee.com/dieskim" target="_blank">
+  <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="220">
+</a>
 
 ## 🚀 Quick Flash Guide
 
