@@ -20,7 +20,7 @@
         .info { background: #e7f3ff; border: 1px solid #2196F3; border-radius: 8px; padding: 2px; margin-bottom: 20px; font-size: 14px; color: #0d47a1; }
         .success { background: #d4edda; border: 1px solid #28a745; border-radius: 8px; padding: 15px; margin-bottom: 20px; font-size: 14px; color: #155724; display: none; }
         .success.show { display: block; }
-        .board-select { margin-bottom: 30px; }
+        .board-select { margin-top: 30px; margin-bottom: 30px; }
         .board-select label { display: block; font-weight: 600; color: #333; margin-bottom: 10px; font-size: 16px; }
         select, input[type="text"] {
             width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; transition: border-color 0.3s;
@@ -37,21 +37,48 @@
         .config-section { margin-top: 30px; padding: 20px; background: #f5f5f5; border-radius: 8px; display: none; }
         .config-section h3 { color: #333; margin-bottom: 15px; font-size: 18px; }
         .key-item { margin-bottom: 20px; }
-        .key-item label { display: block; font-weight: 600; color: #333; margin-bottom: 5px; font-size: 14px; }
-        .key-item input[type="text"] { margin-top: 5px; }
-        .key-item .hint { font-size: 11px; color: #888; margin-top: 3px; font-style: italic; }
+        .key-item label { display: block; font-weight: 600; color: #333; margin-bottom: 8px; font-size: 14px; }
+
+        /* --- Polished modifier chips --- */
+        .key-item .mods {
+            display: flex; gap: 10px; margin-bottom: 8px; flex-wrap: wrap;
+        }
+        .key-item .mods label {
+            position: relative; display: inline-flex; align-items: center; gap: 8px;
+            padding: 8px 12px; border-radius: 999px; border: 1.5px solid #d9d9e3; background: #ffffff;
+            font-size: 12px; color: #3a3a3a; line-height: 1; cursor: pointer; user-select: none;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+            transition: border-color .2s, box-shadow .2s, background .2s, color .2s, transform .06s;
+        }
+        .key-item .mods label:hover { border-color: #b8c0ff; box-shadow: 0 2px 6px rgba(102,126,234,0.15); }
+        .key-item .mods label:active { transform: translateY(1px); }
+        .key-item .mods input[type="checkbox"] { position: absolute; opacity: 0; pointer-events: none; width: 1px; height: 1px; overflow: hidden; }
+        .key-item .mods label:has(input[type="checkbox"]:checked) {
+            background: linear-gradient(180deg, #eef1ff 0%, #e2e7ff 100%);
+            border-color: #667eea; color: #283593; box-shadow: 0 3px 10px rgba(102,126,234,0.25);
+        }
+        .key-item .mods label::before {
+            content: ""; width: 8px; height: 8px; border-radius: 999px; border: 1.5px solid #c8c8d8; background: #f4f5ff;
+            box-shadow: inset 0 0 0 2px #fff; transition: background .2s, border-color .2s;
+        }
+        .key-item .mods label:has(input[type="checkbox"]:checked)::before { background: #667eea; border-color: #364dcf; }
+        .key-item .mods label:has(input[type="checkbox"]:focus-visible),
+        .key-item .fkey-select:focus-visible { outline: 2px solid #667eea; outline-offset: 2px; }
+
+        .key-item select.fkey-select { width: auto; min-width: 120px; padding: 10px 12px; border-radius: 10px; }
+        .key-item .hint { font-size: 11px; color: #888; margin-top: 6px; font-style: italic; }
         .examples { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 12px; margin: 15px 0; font-size: 12px; }
         .examples strong { display: block; margin-bottom: 8px; color: #333; }
         .examples code { display: inline-block; background: #f8f9fa; padding: 4px 8px; margin: 3px 6px 3px 0; border-radius: 3px; font-family: 'Courier New', monospace; color: #667eea; }
         .button-group { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
         .button-group button { flex: 1; min-width: 140px; }
-        button.secondary { background: #667eea; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        button.secondary { background: #667eea; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
         button.secondary:hover:not(:disabled) { background: #5568d3; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,0.4); }
         button.secondary:disabled { background: #ccc; cursor: not-allowed; transform: none; }
         button.toggle { background: #6c757d; width: 100%; margin-bottom: 20px; }
         button.toggle:hover:not(:disabled) { background: #5a6268; }
         .instructions { background: #f5f5f5; border-radius: 8px; padding: 20px; margin-top: 30px; }
-        .instructions h3 { color: #333; margin-bottom: 15px; font-size: 18px; }
+        .instructions h3 { color: #333; margin-bottom: 15px; font-size: 18px; text-align: center; }
         .instructions ol { margin-left: 20px; }
         .instructions li { color: #666; margin-bottom: 10px; line-height: 1.6; }
         .instructions .note { font-family: inherit; font-size: 0.95rem; color: #555; font-style: italic; margin-top: 0.5em; padding-left: 1em; }
@@ -64,85 +91,105 @@
         .console-header h4 { color: #00ff00; font-size: 14px; }
         .console-header button { background: #333; color: #00ff00; border: 1px solid #00ff00; padding: 5px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; }
         .console-header button:hover { background: #444; }
-        .key-grid {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            margin-top: 10px;
+
+        /* Banner buttons */
+        .banner {
+            position: relative;
+            margin: -40px -40px 20px -40px;
         }
-        .key-row {
-            display: flex;
-            gap: 10px;
-        }
-        .key {
-            background: #f8f8f8;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 10px 14px;
-            text-align: center;
-            min-width: 160px;
-            max-width: 160px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            word-wrap: break-word;
-        }
-        .keycap {
-            font-weight: 700;
-            font-size: 13px;
-            color: #333;
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            padding: 6px 4px;
-            margin-bottom: 4px;
-            line-height: 1.3;
-        }
-        .keylabel {
-            font-size: 11px;
-            color: #666;
-        }
-        .mode-badge {
+        .banner-link {
+            position: absolute;
+            bottom: 10px;
+            z-index: 10;
             display: inline-block;
-            padding: 4px 8px;
+            transition: opacity 0.3s;
+        }
+        .banner-link:hover { opacity: 0.8; }
+        .banner-link.left { left: 10px; }
+        .banner-link.right { right: 10px; }
+        .banner-link svg.makerworld { width: 100px;
+            height: auto;
             border-radius: 4px;
-            font-size: 11px;
-            font-weight: 600;
-            margin-left: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            color: #333;
+            background: white;
+            padding: 5px;
         }
-        .mode-bluetooth {
-            background: #e3f2fd;
-            color: #1976d2;
+
+        /* Keyboard Tester Styles */
+        .tester-section { margin-top: 30px; padding: 20px; background: #f5f5f5; border-radius: 8px; display: none; }
+        .tester-section h3 { color: #333; margin-bottom: 15px; font-size: 18px; text-align: center; }
+        .fkey-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; max-width: 600px; margin: 0 auto; }
+        .fkey { padding: 14px; text-align: center; background: #f0f0f0; border: 1px solid #ccc; border-radius: 5px; transition: all 0.1s; font-weight: bold; cursor: default; min-height: 56px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; }
+        .fkey .mods { display:flex; gap:6px; flex-wrap:wrap; justify-content:center; }
+        .mod-badge { color:black; padding:2px 6px; border-radius:999px; border:1px solid #bbb; background:#fff; }
+        .fkey.active { background: #4caf50; color: white; transform: scale(1.05); box-shadow: 0 2px 10px rgba(76, 175, 80, 0.5); }
+        .tester-toggle { background: #28a745; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; width: 100%; }
+        .tester-toggle:hover { background: #218838; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4); }
+
+        /* Default mappings grid */
+        .key-grid { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 10px; }
+        .key-row { display: flex; gap: 10px; }
+        .key {
+            background: #f8f8f8; border: 1px solid #ccc; border-radius: 8px;
+            padding: 12px 14px; text-align: center; min-width: 140px; max-width: 160px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1); word-wrap: break-word;
         }
-        .mode-usb {
-            background: #f3e5f5;
-            color: #7b1fa2;
+        /* F-key badge */
+        .keycap {
+            display: inline-block;
+            font-weight: 700; font-size: 13px; color: #333;
+            background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 6px 8px; line-height: 1.2;
         }
+        /* Pin badge (blue, same capsule look) */
+        .pin-badge {
+            display: inline-block;
+            font-weight: 700; font-size: 12px; color: #fff;
+            background: linear-gradient(180deg, #6f7df6 0%, #5568d3 100%);
+            border: 1px solid #4f5ecc;
+            border-radius: 8px; padding: 6px 8px; line-height: 1.2;
+            box-shadow: 0 2px 6px rgba(102,126,234,0.35);
+        }
+        .keylabel { font-size: 15px; color: #666; margin: 6px 0; font-weight: bold;}
+
+        .mode-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-left: 8px; }
+        .mode-bluetooth { background: #e3f2fd; color: #1976d2; }
+        .mode-usb { background: #f3e5f5; color: #7b1fa2; }
     </style>
 </head>
 <body>
     <div class="container">
-       <div style="text-align:center; margin-bottom:20px;">
-            <img src="https://raw.githubusercontent.com/dieskim/esp32_stream_cheap_deck_mini_macro_keyboard/refs/heads/main/ESP32-C3-Supermini---Stream-Cheap-Deck---Mini-Macro-Keyboard.jpg"
+        <div class="banner">
+            <img src="https://raw.githubusercontent.com/dieskim/esp32_stream_cheap_deck_mini_macro_keyboard/refs/heads/main/ESP32-Supermini-Stream-Cheap-Deck-Mini-Macro-Keyboard.jpg"
                 alt="ESP32 Cheap Deck"
-                style="width:100%; border-radius:16px; box-shadow:0 4px 10px rgba(0,0,0,0.25); margin-bottom:10px;">
+                style="width:100%; display:block; box-shadow:0 4px 10px rgba(0,0,0,0.25); border-radius:20px 20px 0 0;">
+            <a href="https://makerworld.com/en/models/1899311" target="_blank" class="banner-link left">
+                <svg class="makerworld" width="98" height="28" viewBox="0 0 98 28" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_15857_70398)"><path d="M61.5083 20.1809L61.5483 20.1753H61.5152L61.5083 20.1809Z" fill="currentColor"></path><path d="M59.7207 22.1718C59.7207 22.1213 59.7207 22.0719 59.7287 22.0225V22.0314C59.7253 22.0449 59.7218 22.1381 59.7207 22.1718Z" fill="currentColor"></path><path d="M61.5698 20.1728C61.6326 20.166 61.6977 20.1638 61.7617 20.1627C61.6976 20.1621 61.6335 20.1654 61.5698 20.1728Z" fill="currentColor"></path><path d="M77.3252 6.87378L77.3663 6.86816H77.3332L77.3252 6.87378Z" fill="currentColor"></path><path d="M75.5376 8.86483C75.5376 8.8143 75.5376 8.76489 75.5456 8.71436V8.72446C75.5422 8.73682 75.5387 8.83002 75.5376 8.86483Z" fill="currentColor"></path><path d="M77.3867 6.86463C77.4507 6.85902 77.5146 6.85565 77.5797 6.85565C77.5153 6.85467 77.4508 6.85767 77.3867 6.86463Z" fill="currentColor"></path><path d="M46.4352 22.8238L44.3285 16.2544H42.2518L40.1426 22.8285L38.0911 15.645H36L38.855 26.1858H40.8585L43.2871 19.2858L45.7446 26.1858H47.7204L50.5755 15.645H48.4867L46.4352 22.8238Z" fill="currentColor"></path><path d="M67.248 26.2012H69.2899V24.8774V15.645H67.248V26.2012Z" fill="currentColor"></path><path d="M54.8236 18.1885C54.0045 18.1885 53.2038 18.4273 52.5227 18.8747C51.8416 19.3221 51.3108 19.958 50.9974 20.7021C50.6839 21.4461 50.6019 22.2648 50.7617 23.0546C50.9215 23.8445 51.3159 24.57 51.8951 25.1395C52.4743 25.7089 53.2122 26.0967 54.0156 26.2538C54.819 26.4109 55.6517 26.3303 56.4084 26.0221C57.1652 25.7139 57.812 25.192 58.267 24.5224C58.7221 23.8528 58.965 23.0656 58.965 22.2603C58.965 21.1804 58.5287 20.1447 57.752 19.3811C56.9753 18.6175 55.9219 18.1885 54.8236 18.1885ZM54.8236 24.5441C54.364 24.5449 53.9145 24.4115 53.532 24.161C53.1495 23.9104 52.8512 23.554 52.6749 23.1367C52.4985 22.7195 52.452 22.2601 52.5412 21.8169C52.6304 21.3736 52.8514 20.9663 53.1761 20.6466C53.5008 20.3268 53.9147 20.1089 54.3654 20.0205C54.8162 19.9321 55.2834 19.9771 55.7081 20.1499C56.1327 20.3226 56.4958 20.6154 56.7512 20.991C57.0066 21.3667 57.1429 21.8084 57.1429 22.2603C57.1435 22.866 56.8997 23.4472 56.4648 23.8763C56.0299 24.3054 55.4397 24.5473 54.8236 24.5489V24.5441Z" fill="currentColor"></path><path d="M77.3591 15.645V18.9221C76.7383 18.4958 76.0106 18.2451 75.255 18.1972C74.4993 18.1492 73.7448 18.3058 73.0734 18.65C72.402 18.9942 71.8395 19.5127 71.4469 20.1493C71.0543 20.7858 70.8467 21.516 70.8467 22.2605C70.8467 23.0049 71.0543 23.7351 71.4469 24.3717C71.8395 25.0083 72.402 25.5268 73.0734 25.871C73.7448 26.2152 74.4993 26.3718 75.255 26.3238C76.0106 26.2759 76.7383 26.0251 77.3591 25.5989V26.2083H79.401V15.645H77.3591ZM74.9929 24.5491C74.5335 24.5493 74.0842 24.4156 73.7021 24.1648C73.3199 23.914 73.022 23.5573 72.846 23.14C72.67 22.7227 72.6238 22.2635 72.7133 21.8204C72.8028 21.3773 73.0239 20.9702 73.3487 20.6507C73.6736 20.3312 74.0875 20.1135 74.5381 20.0253C74.9888 19.9371 75.4559 19.9822 75.8804 20.1551C76.305 20.3279 76.6678 20.6206 76.9231 20.9962C77.1784 21.3718 77.3147 21.8135 77.3147 22.2652C77.3141 22.8705 77.0693 23.4509 76.634 23.8791C76.1988 24.3072 75.6086 24.5482 74.9929 24.5491Z" fill="currentColor"></path><path d="M62.7724 22.5929C62.7724 22.5268 62.7724 22.5032 62.7808 22.4358C62.8205 21.9513 63.0279 21.4948 63.3684 21.1424C63.7089 20.79 64.162 20.5629 64.6521 20.4991H64.6593H64.6942H64.717C64.784 20.4914 64.8514 20.4879 64.9188 20.4885H64.9692H65.0509C65.117 20.4885 65.1818 20.498 65.2455 20.5074C65.3091 20.5169 65.3656 20.5251 65.3656 20.5251V18.3652C64.3994 18.3921 63.4763 18.7641 62.7688 19.4115V18.6274H60.7329V26.1852H62.7748V22.659C62.7748 22.659 62.7724 22.5964 62.7724 22.5929Z" fill="currentColor"></path><path d="M55.9504 11.6453V12.2357H57.7689V4.37203H55.9504V4.91761C55.328 4.5009 54.6017 4.25892 53.8499 4.21773C53.098 4.17654 52.3489 4.33769 51.6832 4.68384C51.0176 5.02999 50.4605 5.54803 50.0719 6.18225C49.6834 6.81646 49.478 7.54283 49.478 8.28321C49.478 9.0236 49.6834 9.74997 50.0719 10.3842C50.4605 11.0184 51.0176 11.5364 51.6832 11.8826C52.3489 12.2287 53.098 12.3899 53.8499 12.3487C54.6017 12.3075 55.328 12.0655 55.9504 11.6488V11.6453ZM51.2961 8.28203C51.2959 7.83022 51.4319 7.38849 51.6871 7.01273C51.9423 6.63697 52.305 6.34405 52.7296 6.17104C53.1541 5.99803 53.6212 5.95271 54.072 6.04079C54.5227 6.12888 54.9367 6.34642 55.2616 6.6659C55.5866 6.98538 55.8078 7.39244 55.8974 7.83558C55.987 8.27872 55.9409 8.73803 55.765 9.1554C55.589 9.57278 55.2911 9.92946 54.9089 10.1803C54.5267 10.4312 54.0774 10.565 53.6179 10.5647C53.0024 10.5638 52.4124 10.323 51.9772 9.89511C51.542 9.46723 51.2971 8.88716 51.2961 8.28203Z" fill="currentColor"></path><path d="M38.0599 5.46273L41.1612 11.5999H42.5545L45.6545 5.46273V12.2093H47.7132V1.66846H45.5152L41.8578 8.56735L38.1992 1.66846H36V12.2093H38.0599V5.46273Z" fill="currentColor"></path><path d="M67.1903 4.37039H64.728L61.903 7.94028V1.66846H59.8623V12.2294H61.903V8.14222L64.8181 12.2294H67.2804L64.2668 8.0442L67.1903 4.37039Z" fill="currentColor"></path><path d="M79.4055 8.59876C79.4055 8.53145 79.4055 8.50901 79.4139 8.44052C79.4538 7.9562 79.6613 7.49995 80.0018 7.14777C80.3423 6.79559 80.7953 6.56874 81.2852 6.505H81.2936H81.3284H81.3501C81.4175 6.49768 81.4853 6.49452 81.5531 6.49556H81.5651H81.6035H81.6852C81.75 6.49556 81.8149 6.505 81.8798 6.51445C81.9446 6.5239 81.9999 6.53098 81.9999 6.53098V4.37109C81.0317 4.39691 80.1063 4.7689 79.3971 5.41738V4.63326H77.3672V12.2289H79.4091V8.59876H79.4055Z" fill="currentColor"></path><path d="M71.7317 10.5645C71.228 10.5634 70.7383 10.4017 70.3361 10.1036C69.9338 9.80544 69.6409 9.38703 69.5013 8.9112H75.8179C75.8534 8.70318 75.8719 8.4927 75.8732 8.28178C75.8737 7.27312 75.4936 6.30014 74.8064 5.55122C74.1192 4.8023 73.1738 4.33073 72.1532 4.22781C71.1327 4.12489 70.1096 4.39795 69.282 4.99411C68.4545 5.59027 67.8814 6.46713 67.6737 7.45489C67.466 8.44266 67.6384 9.47107 68.1577 10.341C68.6769 11.2109 69.506 11.8605 70.4844 12.1639C71.4628 12.4673 72.5209 12.4029 73.4538 11.9833C74.3868 11.5637 75.1282 10.8187 75.5344 9.89254H73.3724C73.1573 10.1051 72.9017 10.2739 72.6202 10.3892C72.3386 10.5045 72.0367 10.564 71.7317 10.5645ZM71.7317 5.99789C72.1908 5.99846 72.6394 6.13252 73.0211 6.38321C73.4028 6.6339 73.7006 6.99001 73.8769 7.40672H69.5877C69.7639 6.99011 70.0614 6.63404 70.4429 6.38334C70.8244 6.13265 71.2729 5.99853 71.7317 5.99789Z" fill="currentColor"></path><path d="M27.2867 2.68142L20.8492 0.160571L20.4386 0L20.0257 0.160571L13.9977 2.51861L7.96978 0.160571L7.56139 0L7.15188 0.160571L0.713275 2.68142L0 2.96102V25.0401L0.713275 25.3186L7.15188 27.8394L7.56139 28L7.97091 27.8394L14 25.4814L20.028 27.8394L20.4386 28L20.8492 27.8394L27.2867 25.3186L28 25.0401V2.96102L27.2867 2.68142ZM20.4386 1.20372L26.8772 3.7257V12.8356L20.4386 10.3158V1.20372ZM14.4095 13.8787L20.4386 11.5207L26.4677 13.8787L26.7748 13.9989L26.4677 14.119L20.4386 16.4771L14.4095 14.119L14.1024 13.9989L14.4095 13.8787ZM7.56139 1.20372L14 3.7257V12.8356L7.56139 10.3147V1.20372ZM1.53343 13.8787L7.56139 11.5207L13.5905 13.8787L13.8976 13.9989L13.5905 14.119L7.56139 16.4771L1.53343 14.119L1.22629 13.9989L1.53343 13.8787ZM1.12504 24.2732V15.1588L7.56365 17.6785V26.7895L1.12504 24.2732ZM14.0022 24.2732V15.1588L20.4409 17.6785V26.7895L14.0022 24.2732Z" fill="currentColor"></path></g><path fill-rule="evenodd" clip-rule="evenodd" d="M86 -1.33514e-05L86 28L98 28L98 -1.3876e-05L86 -1.33514e-05ZM88.25 22.2065L88.25 24.3617L95.6488 24.3617L95.6488 21.7707C95.6488 21.2465 95.5644 20.7949 95.3957 20.4159C95.2237 20.0338 94.9774 19.7402 94.6569 19.5349C94.3364 19.3296 93.9518 19.227 93.503 19.227C93.115 19.227 92.8047 19.2838 92.5719 19.3975C92.3357 19.5081 92.1569 19.6565 92.0354 19.8428C91.9106 20.0291 91.8229 20.2375 91.7723 20.4681L91.7217 20.4681C91.6778 20.2407 91.5833 20.0481 91.4383 19.8902C91.2932 19.7323 91.1076 19.6123 90.8816 19.5302C90.6555 19.4449 90.4025 19.4023 90.1225 19.4023C89.4275 19.4023 88.9416 19.6391 88.665 20.1128C88.3883 20.5865 88.25 21.2844 88.25 22.2065ZM91.1802 22.0407L91.1802 22.8933L89.5354 22.8933L89.5354 22.1212C89.5354 21.7012 89.5978 21.3949 89.7227 21.2023C89.8441 21.0065 90.0466 20.9086 90.33 20.9086C90.61 20.9086 90.8225 20.9907 90.9676 21.1549C91.1093 21.3191 91.1802 21.6144 91.1802 22.0407ZM94.3532 22.8933L92.4251 22.8933L92.4251 21.9838C92.4251 21.6712 92.4639 21.4265 92.5415 21.2496C92.6191 21.0696 92.7271 20.9417 92.8654 20.8659C93.0037 20.7902 93.164 20.7523 93.3462 20.7523C93.6532 20.7523 93.8978 20.8391 94.08 21.0128C94.2621 21.1865 94.3532 21.4944 94.3532 21.9365L94.3532 22.8933ZM90.1883 14.5091C89.9858 14.8628 89.8846 15.2844 89.8846 15.7738C89.8846 16.2728 89.996 16.7102 90.2186 17.0859C90.4379 17.4617 90.7686 17.7554 91.2105 17.967C91.6491 18.1754 92.1991 18.2796 92.8603 18.2796C93.5115 18.2796 94.0513 18.1644 94.4798 17.9338C94.9082 17.7002 95.2271 17.3796 95.4362 16.9723C95.6454 16.5617 95.75 16.0912 95.75 15.5607C95.75 15.1533 95.7179 14.8075 95.6538 14.5233C95.5897 14.2359 95.4885 13.9612 95.3502 13.6991L94.1559 13.6991C94.3043 13.9959 94.4157 14.2849 94.4899 14.5659C94.5641 14.847 94.6012 15.1565 94.6012 15.4944C94.6012 15.9017 94.4781 16.2207 94.2318 16.4512C93.9821 16.6786 93.6397 16.8002 93.2045 16.8159L93.2045 13.4007L92.4555 13.4007C91.9055 13.4007 91.4399 13.497 91.0587 13.6896C90.6775 13.8823 90.3873 14.1554 90.1883 14.5091ZM91.2713 16.4654C91.0789 16.2791 90.9828 16.0454 90.9828 15.7644C90.9828 15.537 91.0351 15.3507 91.1397 15.2054C91.2443 15.057 91.386 14.9465 91.5648 14.8738C91.7436 14.798 91.9477 14.7586 92.1771 14.7554L92.1771 16.7828C91.7655 16.7544 91.4636 16.6486 91.2713 16.4654ZM94.5202 9.99489C94.5202 9.83699 94.5034 9.68383 94.4696 9.53541C94.4359 9.38383 94.3937 9.23383 94.3431 9.08541L95.4919 9.08541C95.5661 9.24015 95.6269 9.43278 95.6741 9.66331C95.7247 9.89068 95.75 10.1401 95.75 10.4117C95.75 10.7275 95.696 11.0117 95.5881 11.2644C95.4767 11.5138 95.2861 11.7112 95.0162 11.8565C94.7429 11.9986 94.3634 12.0696 93.8775 12.0696L91.1498 12.0696L91.1498 12.7612L90.497 12.7612L89.9808 11.9654L88.7864 11.5486L88.7864 10.6249L89.9909 10.6249L89.9909 9.14226L91.1498 9.14226L91.1498 10.6249L93.8775 10.6249C94.0935 10.6249 94.2554 10.568 94.3634 10.4544C94.4679 10.3375 94.5202 10.1844 94.5202 9.99489ZM90.3704 4.20646C90.0398 4.58541 89.8745 5.13015 89.8745 5.84068C89.8745 6.21331 89.92 6.57489 90.0111 6.92541C90.1022 7.27278 90.2271 7.58699 90.3856 7.86804L91.4281 7.38962C91.3101 7.14331 91.2122 6.89699 91.1346 6.65067C91.057 6.40436 91.0182 6.15331 91.0182 5.89752C91.0182 5.63857 91.0874 5.43646 91.2257 5.2912C91.364 5.14594 91.5816 5.0733 91.8785 5.0733L92.1265 5.0733L92.1569 5.99225C92.1872 6.78173 92.3458 7.37383 92.6326 7.76857C92.916 8.16331 93.358 8.36068 93.9585 8.36068C94.3667 8.36068 94.7041 8.28962 94.9706 8.14752C95.2338 8.00541 95.4295 7.8112 95.5577 7.56489C95.6859 7.31541 95.75 7.03436 95.75 6.72173C95.75 6.42804 95.7196 6.17857 95.6589 5.97331C95.5982 5.76804 95.5037 5.58646 95.3755 5.42857C95.2473 5.27067 95.082 5.11594 94.8796 4.96436L94.8796 4.92646L95.6488 4.64699L95.6488 3.63804L91.8785 3.63804C91.2038 3.63804 90.7011 3.82752 90.3704 4.20646ZM93.0476 5.63225L93.0273 5.0733L93.4929 5.0733C93.8539 5.0733 94.1323 5.18067 94.3279 5.39541C94.5236 5.60699 94.6215 5.86752 94.6215 6.17699C94.6215 6.38541 94.5725 6.55436 94.4747 6.68383C94.3735 6.81331 94.2048 6.87804 93.9686 6.87804C93.6987 6.87804 93.4811 6.78804 93.3158 6.60804C93.1505 6.42488 93.0611 6.09962 93.0476 5.63225Z" fill="currentColor"></path><defs><clipPath id="clip0_15857_70398"><rect width="82" height="28" fill="currentColor"></rect></clipPath></defs></svg>
+            </a>
+            <a href="https://www.buymeacoffee.com/dieskim" target="_blank" class="banner-link right">
+                <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me a Coffee" style="height: 41px !important; width: 174px !important;">
+            </a>
         </div>
-
-        <div class="warning">⚠️ <strong>Chrome/Edge only!</strong> This tool requires Web Serial API.</div>
         <div class="info-title">
             <strong>First time?</strong> Hold the BOOT button while plugging in the USB cable if the device isn't detected.<br><br>
             <strong>Mode Guide:</strong><br>
             • <strong>Bluetooth</strong> - Wireless keyboard over BLE (pairs with your computer)<br>
-            • <strong>USB</strong> - Direct USB HID keyboard (no pairing needed, coming soon for S3)
+            • <strong>USB</strong> - Direct USB HID keyboard (no pairing needed (S3 Only))
         </div>
         <div class="success" id="successMessage">✅ <strong>Success!</strong> Firmware flashed successfully!</div>
 
         <div class="board-select">
             <label for="boardType">Select Your Board & Mode:</label>
             <select id="boardType">
-                <option value="esp32c3-bluetooth">ESP32-C3 <span class="mode-badge mode-bluetooth">Bluetooth</span></option>
-                <option value="esp32s3-bluetooth">ESP32-S3 <span class="mode-badge mode-bluetooth">Bluetooth</span></option>
-                <option value="esp32s3-usb" disabled>ESP32-S3 <span class="mode-badge mode-usb">USB HID</span> (Coming Soon)</option>
+                <option value="esp32c3-ble">ESP32-C3 <span class="mode-badge mode-bluetooth">Bluetooth</span></option>
+                <option value="esp32s3-ble">ESP32-S3 <span class="mode-badge mode-bluetooth">Bluetooth</span></option>
+                <option value="esp32s3-usb">ESP32-S3 <span class="mode-badge mode-usb">USB HID</span></option>
             </select>
+        </div>
+
+        <div class="instructions" style="margin-top: 20px;">
+            <h3 id="mappingsTitle">Default Pin and Key Mappings</h3>
+            <div id="defaultMappings"></div>
         </div>
 
         <esp-web-install-button id="installButton">
@@ -152,14 +199,22 @@
         <!-- Connect button lives outside config; config shows only when connected -->
         <button class="secondary toggle" id="connectConfigBtn">Step 2. Connect and Configure</button>
 
+        <button class="tester-toggle" id="testBtn">Step 3. Test Keyboard</button>
+
+        <div class="tester-section" id="fkey-tester">
+            <h3>F-Key Tester (F1–F24 + modifiers)</h3>
+            <p style="color:#666;font-size:14px;margin-bottom:15px;text-align:center;">Press any F1–F24 (with CTRL / ALT / SHIFT / GUI) and this page will capture it so it won’t trigger system actions.</p>
+            <div class="fkey-grid" id="fkeyGrid"></div>
+            <button class="secondary" onclick="document.getElementById('fkey-tester').style.display='none'; document.getElementById('testBtn').style.display='block';" style="margin-top:20px;width:100%;">Close Tester</button>
+        </div>
+
         <div class="config-section" id="configSection" style="display:none;">
             <h3>🎹 Configure Key Mappings</h3>
             <p style="color:#666;font-size:14px;margin-bottom:15px;">
                 After connecting, you can view & set your F-keys below and save them to your device.
             </p>
 
-            <div id="keyConfigForm">
-              <div class="examples">
+            <div class="examples">
                 <strong>💡 Key Options:</strong>
                 <code>F1 - F24</code>
                 <code>CTRL</code>
@@ -176,116 +231,24 @@
                     You can use single function keys or combine with modifiers: CTRL, ALT, SHIFT, GUI (CMD/WIN).<br>
                     <em>(UI maps firmware codes like 240 → F13.)</em>
                 </p>
-                </div>
+            </div>
+            
+            <div id="keyConfigForm"></div>
 
-                <div class="key-item">
-                    <label>Button 1:</label>
-                    <input type="text" class="key-input" data-button="0" value="F13" placeholder="F1–F24 (Optional Combo)" />
-                </div>
-                <div class="key-item">
-                    <label>Button 2:</label>
-                    <input type="text" class="key-input" data-button="1" value="F14" placeholder="F1–F24 (Optional Combo)" />
-                </div>
-                <div class="key-item">
-                    <label>Button 3:</label>
-                    <input type="text" class="key-input" data-button="2" value="F15" placeholder="F1–F24 (Optional Combo)" />
-                </div>
-                <div class="key-item">
-                    <label>Button 4:</label>
-                    <input type="text" class="key-input" data-button="3" value="F16" placeholder="F1–F24 (Optional Combo)" />
-                </div>
-                <div class="key-item">
-                    <label>Button 5:</label>
-                    <input type="text" class="key-input" data-button="4" value="F17" placeholder="F1–F24 (Optional Combo)" />
-                </div>
-                <div class="key-item">
-                    <label>Button 6:</label>
-                    <input type="text" class="key-input" data-button="5" value="F18" placeholder="F1–F24 (Optional Combo)" />
-                </div>
-                <div class="key-item">
-                    <label>Button 7:</label>
-                    <input type="text" class="key-input" data-button="6" value="F19" placeholder="F1–F24 (Optional Combo)" />
-                </div>
-                <div class="key-item">
-                    <label>Button 8 :</label>
-                    <input type="text" class="key-input" data-button="7" value="F20" placeholder="F1–F24 (Optional Combo)" />
-                </div>
-
-                <div class="button-group">
-                    <button class="secondary" id="saveConfigBtn">Save to Device</button>
-                    <button class="secondary" id="resetConfigBtn">Reset to Defaults</button>
-                    <button class="secondary" id="disconnectConfigBtn" style="background:#dc3545;">Disconnect</button>
-                </div>
+            <div class="button-group">
+                <button class="secondary" id="saveConfigBtn">Save to Device</button>
+                <button class="secondary" id="resetConfigBtn">Reset to Defaults</button>
+                <button class="secondary" id="disconnectConfigBtn" style="background:#dc3545;">Disconnect</button>
             </div>
         </div>
 
-        <div class="instructions">
-            <h3>📝 How to Use</h3>
-            <ol>
-                <li><strong>Select your board type and mode</strong> (C3/S3 + Bluetooth/USB) from the dropdown above.</li>
-                <li><strong>Click "Connect & Flash"</strong> to start the upload process.</li>
-                <li>When prompted, choose your <strong>ESP32 device</strong> from the pop-up list.</li>
-                <li>Wait about <strong>30 seconds</strong> for the flashing process to complete.</li>
-                <li>Open <strong>"Logs & Console"</strong>, then click <strong>"Reset Device"</strong>.</li>
-                <li><strong>(Optional)</strong> Click "Connect for Configuration", customize your keys, and save to device.</li>
-                <li><strong>For Bluetooth mode:</strong> On your computer, <strong>pair via Bluetooth</strong> with <em>"Super Keys"</em>.</li>
-                <li><strong>For USB mode (S3):</strong> Just plug in - no pairing needed!</li>
-                <li>Test your key outputs here <a href="https://key-test.com" target="_blank">https://key-test.com</a></li>
-            </ol>
-            <p class="note">
-                💡 <em>Having trouble connecting (Bluetooth)?</em><br />
-                Forget the old "Super Keys" device, toggle Bluetooth off and on, then pair again.
-            </p>
+        <div class="console" id="console">
+            <div class="console-header">
+                <h4>📟 Device Console</h4>
+                <button id="clearConsole">Clear</button>
+            </div>
+            <div id="consoleOutput"></div>
         </div>
-
-        <div class="instructions" style="margin-top: 20px;">
-            <h3>🎹 Default Key Mappings:</h3>
-            <div class="key-grid">
-                <div class="key-row">
-                <div class="key">
-                    <div class="keycap">F13</div>
-                    <div class="keylabel">Button 1</div>
-                </div>
-                <div class="key">
-                    <div class="keycap">F14</div>
-                    <div class="keylabel">Button 2</div>
-                </div>
-                <div class="key">
-                    <div class="keycap">F15</div>
-                    <div class="keylabel">Button 3</div>
-                </div>
-                <div class="key">
-                    <div class="keycap">F16</div>
-                    <div class="keylabel">Button 4</div>
-                </div>
-                </div>
-                <div class="key-row">
-                <div class="key">
-                    <div class="keycap">F17</div>
-                    <div class="keylabel">Button 5</div>
-                </div>
-                <div class="key">
-                    <div class="keycap">F18</div>
-                    <div class="keylabel">Button 6</div>
-                </div>
-                <div class="key">
-                    <div class="keycap">F19</div>
-                    <div class="keylabel">Button 7</div>
-                </div>
-                <div class="key">
-                    <div class="keycap">F20</div>
-                    <div class="keylabel">Button 8</div>
-                </div>
-                </div>
-            </div>
-            </div>
-            <div class="console" id="console">
-                <div class="console-header">
-                    <h4>📟 Device Console</h4>
-                    <button id="clearConsole">Clear</button>
-                </div>
-                <div id="consoleOutput"></div>
-            </div>
     </div>
 
     <script>
@@ -295,39 +258,31 @@
 
         // F1–F12 = 194–205
         for (let i = 1; i <= 12; i++) {
-        const code = 193 + i; // 194–205
-        F_DEC_TO_NAME[code] = `F${i}`;
-        F_NAME_TO_KEYNAME[`F${i}`] = `KEY_F${i}`;
+            const code = 193 + i; // 194–205
+            F_DEC_TO_NAME[code] = `F${i}`;
+            F_NAME_TO_KEYNAME[`F${i}`] = `KEY_F${i}`;
         }
-
         // F13–F24 = 240–251
         for (let i = 13; i <= 24; i++) {
-        const code = 240 + (i - 13); // 240–251
-        F_DEC_TO_NAME[code] = `F${i}`;
-        F_NAME_TO_KEYNAME[`F${i}`] = `KEY_F${i}`;
+            const code = 240 + (i - 13); // 240–251
+            F_DEC_TO_NAME[code] = `F${i}`;
+            F_NAME_TO_KEYNAME[`F${i}`] = `KEY_F${i}`;
         }
 
         function toPrettyFKey(value) {
-        const n = Number(String(value).trim());
-        return Number.isFinite(n) && F_DEC_TO_NAME[n]
-            ? F_DEC_TO_NAME[n]
-            : `Unknown (${value})`;
+            const n = Number(String(value).trim());
+            return Number.isFinite(n) && F_DEC_TO_NAME[n]
+                ? F_DEC_TO_NAME[n]
+                : `Unknown (${value})`;
         }
 
         function toFirmwareKeyName(input) {
             const s = String(input).trim().toUpperCase();
             if (!s) return null;
 
-            // Split by '+' to support combos like CTRL+ALT+CMD+F19
             const parts = s.split('+').map(p => p.trim()).filter(Boolean);
 
-            // Accept both Windows and Mac naming variants
-            const synonyms = {
-                CMD: 'GUI',
-                WIN: 'GUI',
-                WINDOWS: 'GUI',
-            };
-
+            const synonyms = { CMD: 'GUI', WIN: 'GUI', WINDOWS: 'GUI' };
             const modifiers = ['CTRL', 'ALT', 'SHIFT', 'GUI'];
             const detected = { CTRL: false, ALT: false, SHIFT: false, GUI: false };
             let fkey = null;
@@ -341,7 +296,6 @@
             if (!fkey) return null;
             if (!F_NAME_TO_KEYNAME[fkey]) return null;
 
-            // Build firmware token
             let token = F_NAME_TO_KEYNAME[fkey];
             const prefix = [];
             if (detected.CTRL) prefix.push('CTRL');
@@ -351,9 +305,7 @@
 
             if (prefix.length) token = prefix.join('+') + '+' + token;
             return token;
-            }
-
-
+        }
 
         // ======== ELEMENTS ========
         const installButton = document.getElementById('installButton');
@@ -369,6 +321,11 @@
 
         const consoleOutput = document.getElementById('consoleOutput');
         const clearConsoleBtn = document.getElementById('clearConsole');
+
+        // Tester elements
+        const testBtn = document.getElementById('testBtn');
+        const fkeyTester = document.getElementById('fkey-tester');
+        const fkeyGrid = document.getElementById('fkeyGrid');
 
         // ======== SERIAL STATE ========
         let configPort = null;
@@ -398,16 +355,19 @@
 
         clearConsoleBtn.addEventListener('click', () => { consoleOutput.innerHTML = ''; });
 
+        // --- manifests keyed to select values
         const manifests = {
-            'esp32c3-bluetooth': './firmware/esp32c3-bluetooth/manifest.json',
-            'esp32s3-bluetooth': './firmware/esp32s3-bluetooth/manifest.json',
+            'esp32c3-ble': './firmware/esp32c3-bluetooth/manifest.json',
+            'esp32s3-ble': './firmware/esp32s3-bluetooth/manifest.json',
             'esp32s3-usb': './firmware/esp32s3-usb/manifest.json'
         };
-        
+
         boardSelect.addEventListener('change', (e) => {
-            installButton.manifest = manifests[e.target.value];
+            const key = e.target.value;
+            installButton.manifest = manifests[key];
+            renderDefaultMappings(key);
         });
-        installButton.manifest = manifests['esp32c3-bluetooth'];
+        installButton.manifest = manifests['esp32c3-ble'];
 
         installButton.addEventListener('state-changed', (ev) => {
             if (ev.detail.state === 'INSTALLED') successMessage.classList.add('show');
@@ -419,6 +379,218 @@
             logToConsole(`→ ${command}`, 'sent');
         }
 
+        // ======== INTERACTIVE KEY CONFIG UI ========
+        const modifiersList = ["CTRL", "ALT", "SHIFT", "GUI"];
+        const fKeysList = Array.from({ length: 24 }, (_, i) => `F${i + 1}`);
+
+        function createKeyPicker(index, defaultF) {
+            const wrapper = document.createElement("div");
+            wrapper.className = "key-item";
+            wrapper.dataset.button = index;
+
+            const title = document.createElement("label");
+            title.textContent = `Button ${index + 1}:`;
+            wrapper.appendChild(title);
+
+            // Modifiers
+            const modsDiv = document.createElement("div");
+            modsDiv.className = "mods";
+
+            const modChecks = {};
+            modifiersList.forEach(mod => {
+                const lab = document.createElement("label");
+                const cb = document.createElement("input");
+                cb.type = "checkbox";
+                cb.dataset.mod = mod;
+                lab.appendChild(cb);
+                lab.appendChild(document.createTextNode(mod));
+                modsDiv.appendChild(lab);
+                modChecks[mod] = cb;
+            });
+            wrapper.appendChild(modsDiv);
+
+            // F-key select
+            const select = document.createElement("select");
+            select.className = "fkey-select";
+            fKeysList.forEach(k => {
+                const opt = document.createElement("option");
+                opt.value = k;
+                opt.textContent = k;
+                select.appendChild(opt);
+            });
+            select.value = defaultF;
+            select.dataset.button = index;
+            wrapper.appendChild(select);
+
+            wrapper.modChecks = modChecks;
+            wrapper.select = select;
+
+            return wrapper;
+        }
+
+        function buildKeyConfigForm() {
+            const form = document.getElementById("keyConfigForm");
+            const defaults = ["F13","F14","F15","F16","F17","F18","F19","F20"];
+            form.innerHTML = "";
+            for (let i = 0; i < 8; i++) {
+                form.appendChild(createKeyPicker(i, defaults[i]));
+            }
+        }
+        buildKeyConfigForm();
+
+        function getKeyItem(index) {
+            return document.querySelector(`#keyConfigForm .key-item[data-button="${index}"]`);
+        }
+
+        // ======== DEFAULT MAPPINGS (Pins + Keys) ========
+        const DEFAULT_KEYS = ['F13','F14','F15','F16','F17','F18','F19','F20'];
+        const PINS = {
+            C3:  [20, 9, 2, 1, 21, 10, 3, 0],
+            S3:  [1, 2, 13, 4, 5, 6, 7, 8]
+        };
+        function currentBoardFamily(selectValue) {
+            if (selectValue === 'esp32s3-ble' || selectValue === 'esp32s3-usb') return 'S3';
+            return 'C3';
+        }
+        function renderDefaultMappings(selectValue) {
+            const family = currentBoardFamily(selectValue);
+            const boardName = selectValue.startsWith('esp32c3') ? 'ESP32-C3' : 'ESP32-S3';
+            document.getElementById('mappingsTitle').textContent = `Default Pin and Key Mappings for ${boardName}`;
+            const pins = PINS[family];
+            const container = document.getElementById('defaultMappings');
+
+            // 4x2 grid, each tile shows: Pin (blue badge), Button label, F-key badge
+            function tile(idx) {
+                return `
+                    <div class="key">
+                        <div class="pin-badge">Pin ${pins[idx]}</div>
+                        <div class="keylabel">Button ${idx + 1}</div>
+                        <div class="keycap">${DEFAULT_KEYS[idx]}</div>
+                    </div>
+                `;
+            }
+            const row1 = [0,1,2,3].map(tile).join('');
+            const row2 = [4,5,6,7].map(tile).join('');
+
+            container.innerHTML = `
+                <div class="key-grid">
+                    <div class="key-row">${row1}</div>
+                    <div class="key-row">${row2}</div>
+                </div>
+            `;
+        }
+        // initial render for default selection
+        renderDefaultMappings('esp32c3-ble');
+
+        // ======== KEYBOARD TESTER (F1–F24 + modifiers, capture & suppress) ========
+        function buildFKeyGrid() {
+            fkeyGrid.innerHTML = '';
+            for (let i = 1; i <= 24; i++) {
+                const keyEl = document.createElement('div');
+                keyEl.className = 'fkey';
+                keyEl.dataset.key = `F${i}`;
+                keyEl.innerHTML = `<div class="label">F${i}</div><div class="mods"></div>`;
+                fkeyGrid.appendChild(keyEl);
+            }
+        }
+        buildFKeyGrid();
+
+        // Track currently shown-as-pressed F-keys (to recover missing keyups)
+        const pressedF = new Set();
+
+        // Helper: is this an F1–F24 key?
+        function parseFKeyFromEvent(e) {
+            // Prefer KeyboardEvent.code (e.g., "F13") where available
+            let code = e.code || '';
+            if (/^F\d{1,2}$/.test(code)) {
+                const n = parseInt(code.slice(1), 10);
+                if (n >= 1 && n <= 24) return `F${n}`;
+            }
+            // Fallback: try key if browser reports "F1" etc.
+            let key = e.key || '';
+            if (/^F\d{1,2}$/.test(key)) {
+                const n = parseInt(key.slice(1), 10);
+                if (n >= 1 && n <= 24) return `F${n}`;
+            }
+            return null;
+        }
+
+        function updateKeyVisual(fName, isDown, e) {
+            const el = document.querySelector(`.fkey[data-key="${fName}"]`);
+            if (!el) return;
+            if (isDown) {
+                el.classList.add('active');
+                const modsDiv = el.querySelector('.mods');
+                if (modsDiv) {
+                    modsDiv.innerHTML = '';
+                    if (e && e.ctrlKey)  modsDiv.insertAdjacentHTML('beforeend','<span class="mod-badge">CTRL</span>');
+                    if (e && e.shiftKey) modsDiv.insertAdjacentHTML('beforeend','<span class="mod-badge">SHIFT</span>');
+                    if (e && e.altKey)   modsDiv.insertAdjacentHTML('beforeend','<span class="mod-badge">ALT</span>');
+                    if (e && e.metaKey)  modsDiv.insertAdjacentHTML('beforeend','<span class="mod-badge">GUI</span>');
+                }
+            } else {
+                el.classList.remove('active');
+                const modsDiv = el.querySelector('.mods');
+                if (modsDiv) modsDiv.innerHTML = '';
+            }
+        }
+
+        function clearAllActive() {
+            pressedF.forEach(f => updateKeyVisual(f, false));
+            pressedF.clear();
+        }
+
+        function suppress(e) {
+            // Stop browser & OS default handling to avoid triggering system actions
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            return false;
+        }
+
+        // Use capture + passive:false so preventDefault works with Cmd/Meta combos
+        window.addEventListener('keydown', (e) => {
+            const fName = parseFKeyFromEvent(e);
+            if (fName) {
+                updateKeyVisual(fName, true, e);
+                pressedF.add(fName);
+                logToConsole(`F-Key DOWN: ${fName} ${e.ctrlKey?'+CTRL':''}${e.shiftKey?'+SHIFT':''}${e.altKey?'+ALT':''}${e.metaKey?'+GUI':''}`, 'info');
+                suppress(e);
+            }
+        }, { capture: true, passive: false });
+
+        window.addEventListener('keyup', (e) => {
+            const fName = parseFKeyFromEvent(e);
+            if (fName) {
+                updateKeyVisual(fName, false, e);
+                pressedF.delete(fName);
+                logToConsole(`F-Key UP: ${fName}`, 'info');
+                suppress(e);
+            }
+        }, { capture: true, passive: false });
+
+        // macOS/Safari/Chrome quirk: when Meta/GUI releases, F-key keyup may never fire.
+        // Clear any stuck tiles on Meta keyup.
+        window.addEventListener('keyup', (e) => {
+            if (e.key === 'Meta') {
+                clearAllActive();
+                suppress(e);
+            }
+        }, { capture: true, passive: false });
+
+        // Also clear if the tab loses focus or is hidden (Cmd+Tab, switching apps, etc.)
+        window.addEventListener('blur', () => clearAllActive(), { capture: true });
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) clearAllActive();
+        }, { capture: true });
+
+        // When tester opens, ensure it shows and we’re ready
+        testBtn.addEventListener('click', () => {
+            testBtn.style.display = 'none';
+            fkeyTester.style.display = 'block';
+        });
+
+        // ======== READ LOOP ========
         async function startReadLoop() {
             if (!configReader || readLoopActive) return;
             readLoopActive = true;
@@ -427,91 +599,73 @@
             try {
                 logToConsole('Read loop started, listening for data...', 'info');
                 while (readLoopActive && configReader) {
-                const { value, done } = await configReader.read();
-                if (done) {
-                    logToConsole('Serial connection closed', 'error');
-                    readLoopActive = false;
-                    break;
-                }
-                if (value) {
-                    buffer += value;
-                    const lines = buffer.split('\n');
-                    buffer = lines.pop() || '';
+                    const { value, done } = await configReader.read();
+                    if (done) {
+                        logToConsole('Serial connection closed', 'error');
+                        readLoopActive = false;
+                        break;
+                    }
+                    if (value) {
+                        buffer += value;
+                        const lines = buffer.split('\n');
+                        buffer = lines.pop() || '';
 
-                    for (let line of lines) {
-                    line = line.trim();
-                    if (!line) continue;
+                        for (let line of lines) {
+                            line = line.trim();
+                            if (!line) continue;
 
-                    logToConsole(`← ${line}`, 'received');
+                            logToConsole(`← ${line}`, 'received');
 
-                    if (line.startsWith('KEY:')) {
-                        const parts = line.split(':');
+                            if (line.startsWith('KEY:')) {
+                                const parts = line.split(':');
 
-                        // expected: KEY:<index>:<code>:<mods>
-                        if (parts.length >= 4) {
-                        const buttonIndex = parseInt(parts[1], 10);
-                        const rawCode = Number(parts[2]);
-                        const mods = parts[3].trim();
+                                // expected: KEY:<index>:<code>:<mods>
+                                if (parts.length >= 4) {
+                                    const buttonIndex = parseInt(parts[1], 10);
+                                    const rawCode = Number(parts[2]);
+                                    const mods = parts[3].trim();
 
-                        const base = F_DEC_TO_NAME[rawCode] || `Unknown (${rawCode})`;
-                        let display = base;
+                                    const base = F_DEC_TO_NAME[rawCode] || `Unknown (${rawCode})`;
+                                    const item = getKeyItem(buttonIndex);
+                                    if (item && /^F\d{1,2}$/.test(base)) {
+                                        if (fKeysList.includes(base)) item.select.value = base;
+                                        modifiersList.forEach(m => item.modChecks[m].checked = false);
 
-                        if (mods && mods !== '-' && mods !== '') {
-                            // clean up duplicate plus signs / trailing +
-                            const modPretty = mods
-                            .replace(/\+$/, '')
-                            .replace(/\+\+/g, '+')
-                            .replace(/GUI/g, 'GUI')
-                            .replace(/CMD/g, 'CMD')
-                            .replace(/WIN/g, 'WIN')
-                            .replace(/SHIFT/g, 'SHIFT')
-                            .replace(/CTRL/g, 'CTRL')
-                            .replace(/ALT/g, 'ALT');
-
-                            display = `${modPretty}+${base}`;
-                        }
-
-                        const input = document.querySelector(
-                            `input[data-button="${buttonIndex}"]`
-                        );
-                        if (input) {
-                            input.value = display;
-                            logToConsole(
-                            `✓ Updated Button ${buttonIndex + 1} to: ${display}`,
-                            'info'
-                            );
-                        }
-                        } else if (parts.length >= 3) {
-                        // old format: KEY:<index>:<code>
-                        const buttonIndex = parseInt(parts[1], 10);
-                        const rawVal = parts[2];
-                        const pretty = toPrettyFKey(rawVal);
-                        const input = document.querySelector(
-                            `input[data-button="${buttonIndex}"]`
-                        );
-                        if (input) {
-                            input.value = pretty;
-                            logToConsole(
-                            `✓ Updated Button ${buttonIndex + 1} to: ${pretty}`,
-                            'info'
-                            );
-                        }
+                                        if (mods && mods !== '-' && mods !== '') {
+                                            const mParts = mods.replace(/\+$/, '').split('+').map(s => s.trim().toUpperCase()).filter(Boolean);
+                                            mParts.forEach(m => {
+                                                const normalized = (m === 'CMD' || m === 'WIN' || m === 'WINDOWS') ? 'GUI' : m;
+                                                if (item.modChecks[normalized]) item.modChecks[normalized].checked = true;
+                                            });
+                                        }
+                                        logToConsole(`✓ Updated Button ${buttonIndex + 1} to: ${mods && mods !== '-' ? mods + '+' : ''}${base}`, 'info');
+                                    }
+                                } else if (parts.length >= 3) {
+                                    // old format: KEY:<index>:<code>
+                                    const buttonIndex = parseInt(parts[1], 10);
+                                    const rawVal = parts[2];
+                                    const pretty = toPrettyFKey(rawVal);
+                                    const item = getKeyItem(buttonIndex);
+                                    if (item && /^F\d{1,2}$/.test(pretty)) {
+                                        item.select.value = pretty;
+                                        modifiersList.forEach(m => item.modChecks[m].checked = false);
+                                        logToConsole(`✓ Updated Button ${buttonIndex + 1} to: ${pretty}`, 'info');
+                                    }
+                                }
+                            }
                         }
                     }
-                    }
-                }
-                await new Promise((r) => setTimeout(r, 10));
+                    await new Promise((r) => setTimeout(r, 10));
                 }
             } catch (e) {
                 if (!disconnecting) {
-                logToConsole(`Read error: ${e.message}`, 'error');
-                logToConsole(`Stack: ${e.stack}`, 'error');
+                    logToConsole(`Read error: ${e.message}`, 'error');
+                    logToConsole(`Stack: ${e.stack}`, 'error');
                 }
                 readLoopActive = false;
             }
             logToConsole('Read loop stopped', 'info');
-            }
-
+        }
 
         // CONNECT
         connectConfigBtn.addEventListener('click', async () => {
@@ -524,7 +678,6 @@
                 await port.open({ baudRate: 115200, dataBits: 8, stopBits: 1, parity: 'none', flowControl: 'none' });
                 logToConsole('✓ Serial port opened!', 'info');
 
-                // Reader pipeline: port.readable -> TextDecoderStream -> reader
                 if (port.readable) {
                     textDecoder = new TextDecoderStream();
                     readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
@@ -533,7 +686,6 @@
                     logToConsole('ERROR: Port not readable!', 'error');
                 }
 
-                // Writer pipeline: TextEncoderStream -> port.writable
                 if (port.writable) {
                     textEncoder = new TextEncoderStream();
                     writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
@@ -544,7 +696,6 @@
 
                 configPort = port;
 
-                // Show config UI, hide connect button
                 connectConfigBtn.style.display = 'none';
                 configSection.style.display = 'block';
 
@@ -561,10 +712,9 @@
             }
         });
 
-        // DISCONNECT (under the keys)
+        // DISCONNECT
         disconnectConfigBtn.addEventListener('click', async () => {
             if (!configPort && !configReader && !configWriter) {
-                // Already disconnected UI-wise
                 configSection.style.display = 'none';
                 connectConfigBtn.style.display = 'block';
                 return;
@@ -574,43 +724,16 @@
                 logToConsole('Disconnecting...', 'info');
                 readLoopActive = false;
 
-                // Stop reader cleanly
-                if (configReader) {
-                    try { await configReader.cancel(); } catch {}
-                    try { configReader.releaseLock(); } catch {}
-                    configReader = null;
-                }
-                if (readableStreamClosed) {
-                    try { await readableStreamClosed; } catch {}
-                    readableStreamClosed = null;
-                }
-                if (textDecoder) {
-                    try { textDecoder.readable.cancel(); } catch {}
-                    textDecoder = null;
-                }
+                if (configReader) { try { await configReader.cancel(); } catch {} try { configReader.releaseLock(); } catch {} configReader = null; }
+                if (readableStreamClosed) { try { await readableStreamClosed; } catch {} readableStreamClosed = null; }
+                if (textDecoder) { try { textDecoder.readable.cancel(); } catch {} textDecoder = null; }
 
-                // Stop writer cleanly
-                if (configWriter) {
-                    try { await configWriter.close(); } catch {}
-                    try { configWriter.releaseLock(); } catch {}
-                    configWriter = null;
-                }
-                if (writableStreamClosed) {
-                    try { await writableStreamClosed; } catch {}
-                    writableStreamClosed = null;
-                }
-                if (textEncoder) {
-                    try { textEncoder.readable.cancel(); } catch {}
-                    textEncoder = null;
-                }
+                if (configWriter) { try { await configWriter.close(); } catch {} try { configWriter.releaseLock(); } catch {} configWriter = null; }
+                if (writableStreamClosed) { try { await writableStreamClosed; } catch {} writableStreamClosed = null; }
+                if (textEncoder) { try { textEncoder.readable.cancel(); } catch {} textEncoder = null; }
 
-                // Finally close the port
-                if (configPort) {
-                    try { await configPort.close(); } catch {}
-                    configPort = null;
-                }
+                if (configPort) { try { await configPort.close(); } catch {} configPort = null; }
 
-                // Hide the entire Configure Key Mappings section and re-show connect button
                 configSection.style.display = 'none';
                 connectConfigBtn.style.display = 'block';
 
@@ -622,7 +745,7 @@
             }
         });
 
-        // SAVE (F13–F24 only for buttons 0..6)
+        // SAVE
         saveConfigBtn.addEventListener('click', async () => {
             if (!configWriter) { alert('Please connect to device first!'); return; }
 
@@ -634,21 +757,21 @@
                 await sendCommand('CONFIG_START');
                 await new Promise(resolve => setTimeout(resolve, 400));
 
-                const inputs = document.querySelectorAll('.key-input');
-                for (let input of inputs) {
-                    const buttonIndex = parseInt(input.dataset.button, 10);
-                    const typed = input.value.trim();
+                const keyItems = document.querySelectorAll('#keyConfigForm .key-item');
+                for (let item of keyItems) {
+                    const buttonIndex = parseInt(item.dataset.button, 10);
+                    const mods = modifiersList.filter(m => item.modChecks[m].checked);
+                    const fkey = item.select.value;
+                    const combo = mods.length ? mods.join('+') + '+' + fkey : fkey;
+                    const fwToken = toFirmwareKeyName(combo);
 
-                    if (buttonIndex >= 0 && buttonIndex <= 7) {
-                        const fwToken = toFirmwareKeyName(typed);
-                        if (!fwToken) {
-                            logToConsole(`Skipping Button ${buttonIndex + 1}: unsupported "${typed}"`, 'error');
-                            continue;
-                        }
-                        logToConsole(`Setting Button ${buttonIndex + 1} to: ${fwToken}`, 'info');
-                        await sendCommand(`SET_KEY:${buttonIndex}:${fwToken}`);
-                        await new Promise(r => setTimeout(r, 250));
+                    if (!fwToken) {
+                        logToConsole(`Skipping Button ${buttonIndex + 1}: unsupported "${combo}"`, 'error');
+                        continue;
                     }
+                    logToConsole(`Setting Button ${buttonIndex + 1} to: ${fwToken}`, 'info');
+                    await sendCommand(`SET_KEY:${buttonIndex}:${fwToken}`);
+                    await new Promise(r => setTimeout(r, 250));
                 }
 
                 logToConsole('Finalizing configuration...', 'info');
@@ -669,7 +792,7 @@
             saveConfigBtn.textContent = 'Save to Device';
         });
 
-        // RESET (and re-read)
+        // RESET
         resetConfigBtn.addEventListener('click', async () => {
             if (!configWriter) { alert('Please connect to device first!'); return; }
             if (!confirm('Reset all keys to default values?')) return;
@@ -686,9 +809,14 @@
                 logToConsole('Requesting config after reset...', 'info');
                 await sendCommand('GET_CONFIG');
 
-                const inputs = document.querySelectorAll('.key-input');
                 const defaults = ['F13', 'F14', 'F15', 'F16', 'F17', 'F18', 'F19', 'F20'];
-                inputs.forEach((input, i) => { input.value = defaults[i]; });
+                for (let i = 0; i < 8; i++) {
+                    const item = getKeyItem(i);
+                    if (item) {
+                        item.select.value = defaults[i];
+                        modifiersList.forEach(m => item.modChecks[m].checked = false);
+                    }
+                }
 
                 logToConsole('✓ Reset to defaults complete and verified!', 'info');
                 alert('✅ Keys reset to default values! (UI refreshed from device.)');
@@ -700,6 +828,9 @@
             resetConfigBtn.disabled = false;
             resetConfigBtn.textContent = 'Reset to Defaults';
         });
+
+        // Initial default mapping render for current selection
+        renderDefaultMappings(boardSelect.value || 'esp32c3-ble');
     </script>
 </body>
 </html>

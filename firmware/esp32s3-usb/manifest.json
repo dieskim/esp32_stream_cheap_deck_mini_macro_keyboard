@@ -1,0 +1,17 @@
+{
+  "name": "ESP32 Stream Deck S3 USB",
+  "version": "1.0.0",
+  "home_assistant_domain": "esphome",
+  "new_install_prompt_erase": true,
+  "builds": [
+    {
+      "chipFamily": "ESP32-S3",
+      "parts": [
+        {
+          "path": "firmware.bin",
+          "offset": 0
+        }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # ⚡ ESP32-C3 Stream Deck Mini Macro Keyboard
 
-[![ESP32 Stream Deck](https://raw.githubusercontent.com/dieskim/esp32_stream_cheap_deck_mini_macro_keyboard/refs/heads/main/ESP32-C3-Supermini---Stream-Cheap-Deck---Mini-Macro-Keyboard.jpg)](https://dieskim.github.io/esp32_stream_cheap_deck_mini_macro_keyboard/)
+[![ESP32 Stream Deck](https://raw.githubusercontent.com/dieskim/esp32_stream_cheap_deck_mini_macro_keyboard/refs/heads/main/ESP32-Supermini-Stream-Cheap-Deck-Mini-Macro-Keyboard.jpg)](https://dieskim.github.io/esp32_stream_cheap_deck_mini_macro_keyboard/)
 
 
 **3D Printed Case:** [Download on MakerWorld](https://makerworld.com/en/models/1899311-esp32-stream-cheap-deck-bluetooth-macro-keyboard)
