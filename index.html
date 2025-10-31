@@ -81,7 +81,7 @@
         .instructions h3 { color: #333; margin-bottom: 15px; font-size: 18px; text-align: center; }
         .instructions ol { margin-left: 20px; }
         .instructions li { color: #666; margin-bottom: 10px; line-height: 1.6; }
-        .instructions .note { font-family: inherit; font-size: 0.95rem; color: #555; font-style: italic; margin-top: 0.5em; padding-left: 1em; }
+        .instructions .note { font-family: inherit; font-size: 0.95rem; color: #555; font-style: italic; margin-top: 0.5em; padding-left: 1em; padding-bottom: 1em;}
         .console { background: #1e1e1e; color: #00ff00; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 12px; max-height: 300px; overflow-y: auto; margin-top: 20px; display: block; }
         .console-line { margin-bottom: 3px; word-wrap: break-word; }
         .console-line.sent { color: #4fc3f7; }
@@ -190,6 +190,30 @@
         <div class="instructions" style="margin-top: 20px;">
             <h3 id="mappingsTitle">Default Pin and Key Mappings</h3>
             <div id="defaultMappings"></div>
+        </div>
+
+         <div class="instructions">
+            <h3>📝 How to Use</h3>
+            <ol>
+                <li><strong>Select your board type and mode</strong> (C3/S3 + Bluetooth/USB) from the dropdown above.</li>
+                <li><strong>Click "Connect & Flash"</strong> to start the upload process.</li>
+                <p class="note">
+                    💡 <em>S3 might need to be put in Download Mode: To enter download mode: hold [BOOT], press and release [RESET], then release [BOOT]</em><br />
+                </p>
+                <li>When prompted, choose your <strong>ESP32 device</strong> from the pop-up list.</li>
+                <li>Wait about <strong>30 seconds</strong> for the flashing process to complete.</li>
+                <li>Open <strong>"Logs & Console"</strong>, then click <strong>"Reset Device"</strong>.</li>
+                <p class="note">
+                    💡 <em>S3 needs to restarted with the [RESET] Button after flashing</em><br />
+                </p>
+                <li><strong>(Optional)</strong> Click "Connect for Configuration", customize your keys, and save to device.</li>
+                <li><strong>For Bluetooth mode:</strong> On your computer, <strong>pair via Bluetooth</strong> with <em>"Super Keys"</em>.</li>
+                <p class="note">
+                    💡 <em>Having trouble connecting (Bluetooth)?  Forget the old "Super Keys" device, toggle Bluetooth off and on, then pair again.</em>
+                </p>
+                <li><strong>For USB mode (S3):</strong> Just plug in - no pairing needed!</li>
+                <li>Test your keys using the <strong>"Test Keyboard"</strong> button.</li>
+                
         </div>
 
         <esp-web-install-button id="installButton">
