@@ -48,6 +48,78 @@ You can:
 ## 🛠️ Advanced / Manual Setup
 If you prefer flashing via Arduino IDE, you can still download the Arduino Sketch and Manually Flash it.
 
+## 🛠️ How to Rebuild the Firmware (Arduino IDE)
+
+If you need to rebuild the merged firmware binary used by the web flasher, follow this checklist.
+
+### How to Rebuild
+
+1. Open the project in **Arduino IDE**
+2. Select the following options from the **Tools** menu:
+   - **Board:** `ESP32C3 Dev Module`
+   - **USB CDC On Boot:** `Enabled`
+3. Build the firmware:
+   - `Sketch → Export Compiled Binary`
+4. Locate the generated merged binary in the sketch folder:
+   - `*.ino.merged*.bin`
+5. (Optional) Rename the file for your flasher or release:
+   - `cheap_deck_c3_ble_v1.0.1.bin`
+6. Update the manigest.json
+
+The merged binary includes the bootloader, partition table, and application firmware in a single file and is suitable for use with the web flasher.
+
+
+### How to Rebuild
+
+#### For ESP32-C3 (Bluetooth)
+
+1. Open the project in **Arduino IDE**
+2. Select the following options from the **Tools** menu:
+   - **Board:** `ESP32C3 Dev Module`
+   - **USB CDC On Boot:** `Enabled`
+3. Build the firmware:
+   - `Sketch → Export Compiled Binary`
+4. Locate the generated merged binary in the sketch folder:
+   - `*.ino.merged*.bin`
+5. (Optional) Rename the file for your flasher or release:
+   - `cheap_deck_c3_ble_v1.0.1.bin`
+6. Update the manifest.json
+
+#### For ESP32-S3 (Bluetooth)
+
+1. Open the project in **Arduino IDE**
+2. Select the following options from the **Tools** menu:
+   - **Board:** `ESP32S3 Dev Module`
+   - **USB CDC On Boot:** `Enabled`
+3. Build the firmware:
+   - `Sketch → Export Compiled Binary`
+4. Locate the generated merged binary in the sketch folder:
+   - `*.ino.merged*.bin`
+5. (Optional) Rename the file for your flasher or release:
+   - `cheap_deck_s3_ble_v1.0.1.bin`
+6. Update the manifest.json
+
+#### For ESP32-S3 (USB HID)
+
+1. Open the project in **Arduino IDE**
+2. Select the following options from the **Tools** menu:
+   - **Board:** `ESP32S3 Dev Module`
+   - **USB CDC On Boot:** `Enabled`
+   - **USB Mode:** `USB-OTG (TinyUSB)` *(critical for USB HID functionality)*
+   - **USB DFU On Boot:** `Disabled`
+3. Build the firmware:
+   - `Sketch → Export Compiled Binary`
+4. Locate the generated merged binary in the sketch folder:
+   - `*.ino.merged*.bin`
+5. (Optional) Rename the file for your flasher or release:
+   - `cheap_deck_s3_usb_v1.0.1.bin`
+6. Update the manifest.json
+
+**Important Notes:**
+- The merged binary includes the bootloader, partition table, and application firmware in a single file
+- This binary format is suitable for use with the web flasher
+- **For S3 USB HID mode:** The `USB Mode: USB-OTG (TinyUSB)` setting is essential for proper USB HID keyboard functionality
+
 ---
 
 ✨ Created by [@dieskim](https://github.com/dieskim)

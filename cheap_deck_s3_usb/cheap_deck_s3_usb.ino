@@ -28,13 +28,20 @@ const uint8_t buttonPins[] = {1, 2, 13, 4, 5, 6, 7, 8};
 // ─────────────────────────────────────────────────
 
 void usbKeyPressImpl(uint8_t keyCode) {
-  usbKeyboard.press(keyCode);
+  if (isAsciiKey(keyCode)) {
+    usbKeyboard.press(hidToAscii(keyCode));
+  } else {
+    usbKeyboard.press(keyCode); // F-keys, modifiers, etc.
+  }
 }
 
 void usbKeyReleaseImpl(uint8_t keyCode) {
-  usbKeyboard.release(keyCode);
+  if (isAsciiKey(keyCode)) {
+    usbKeyboard.release(hidToAscii(keyCode));
+  } else {
+    usbKeyboard.release(keyCode);
+  }
 }
-
 // Set function pointers for common.h
 KeyPressFn hidKeyPress = usbKeyPressImpl;
 KeyReleaseFn hidKeyRelease = usbKeyReleaseImpl;

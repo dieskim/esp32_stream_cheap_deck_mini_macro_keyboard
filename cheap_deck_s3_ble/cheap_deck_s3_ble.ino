@@ -29,11 +29,19 @@ bool lastConnected = false;
 // ─────────────────────────────────────────────────
 
 void bleKeyPressImpl(uint8_t keyCode) {
-  bleKeyboard.press(keyCode);
+  if (isAsciiKey(keyCode)) {
+    bleKeyboard.press(hidToAscii(keyCode));
+  } else {
+    bleKeyboard.press(keyCode); // F-keys, modifiers, etc.
+  }
 }
 
 void bleKeyReleaseImpl(uint8_t keyCode) {
-  bleKeyboard.release(keyCode);
+  if (isAsciiKey(keyCode)) {
+    bleKeyboard.release(hidToAscii(keyCode));
+  } else {
+    bleKeyboard.release(keyCode);
+  }
 }
 
 // Set function pointers for common.h

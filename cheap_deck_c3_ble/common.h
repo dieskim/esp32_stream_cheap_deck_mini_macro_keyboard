@@ -15,6 +15,19 @@ const char* buttonNames[] = {
   "Button 5", "Button 6", "Button 7", "Button 8"
 };
 
+bool isAsciiKey(uint8_t hid) {
+  return (hid >= 4 && hid <= 29)   // A–Z
+      || (hid >= 30 && hid <= 38)  // 1–9
+      || (hid == 39);              // 0
+}
+
+char hidToAscii(uint8_t hid) {
+  if (hid >= 4 && hid <= 29) return 'a' + (hid - 4);
+  if (hid >= 30 && hid <= 38) return '1' + (hid - 30);
+  if (hid == 39) return '0';
+  return 0;
+}
+
 // ─────────────────────────────────────────────────
 // LED UTILS (SHARED)
 // ─────────────────────────────────────────────────
@@ -108,6 +121,29 @@ KeyCombo parseKeyCombo(String combo) {
     else if (fnum >= 13 && fnum <= 24)
       kc.keyCode = 240 + (fnum - 13); // 240–251
   }
+
+  // 0 -9 keys
+  if (kc.keyCode == 0) {
+    int keyPos = combo.lastIndexOf("KEY_");
+    if (keyPos >= 0 && keyPos + 4 < combo.length()) {
+      char ch = combo.charAt(keyPos + 4);
+      if (ch >= '0' && ch <= '9') {
+        int d = ch - '0';
+        kc.keyCode = (d == 0) ? 39 : 29 + d; // HID: 0=39, 1–9=30–38
+      }
+    }
+  }
+
+  // A - Z keys
+  if (kc.keyCode == 0) {
+    int keyPos = combo.lastIndexOf("KEY_");
+    if (keyPos >= 0 && keyPos + 4 < combo.length()) {
+      char ch = combo.charAt(keyPos + 4);
+      if (ch >= 'A' && ch <= 'Z') {
+        kc.keyCode = 4 + (ch - 'A'); // HID: A=4 ... Z=29
+      }
+    }
+  }   
 
   return kc;
 }

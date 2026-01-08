@@ -119,14 +119,20 @@
         /* Keyboard Tester Styles */
         .tester-section { margin-top: 30px; padding: 20px; background: #f5f5f5; border-radius: 8px; display: none; }
         .tester-section h3 { color: #333; margin-bottom: 15px; font-size: 18px; text-align: center; }
+        .key-section { margin-bottom: 25px; }
+        .key-section h4 { color: #555; margin-bottom: 10px; font-size: 16px; text-align: center; }
         .fkey-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; max-width: 600px; margin: 0 auto; }
+        .letter-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px; max-width: 600px; margin: 0 auto; }
+        .number-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px; max-width: 600px; margin: 0 auto; }
         .fkey { padding: 14px; text-align: center; background: #f0f0f0; border: 1px solid #ccc; border-radius: 5px; transition: all 0.1s; font-weight: bold; cursor: default; min-height: 56px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; }
-        .fkey .mods { display:flex; gap:6px; flex-wrap:wrap; justify-content:center; }
-        .mod-badge { color:black; padding:2px 6px; border-radius:999px; border:1px solid #bbb; background:#fff; }
+        .letter-key, .number-key { padding: 12px 8px; text-align: center; background: #f0f0f0; border: 1px solid #ccc; border-radius: 5px; transition: all 0.1s; font-weight: bold; cursor: default; min-height: 50px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; font-size: 14px; }
+        .fkey .mods, .letter-key .mods, .number-key .mods { display:flex; gap:4px; flex-wrap:wrap; justify-content:center; }
+        .mod-badge { color:black; padding:2px 5px; border-radius:999px; border:1px solid #bbb; background:#fff; font-size: 9px; }
         .fkey.active { background: #4caf50; color: white; transform: scale(1.05); box-shadow: 0 2px 10px rgba(76, 175, 80, 0.5); }
+        .letter-key.active, .number-key.active { background: #2196F3; color: white; transform: scale(1.05); box-shadow: 0 2px 10px rgba(33, 150, 243, 0.5); }
         .tester-toggle { background: #28a745; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; width: 100%; }
         .tester-toggle:hover { background: #218838; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4); }
-
+        
         /* Default mappings grid */
         .key-grid { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 10px; }
         .key-row { display: flex; gap: 10px; }
@@ -226,9 +232,24 @@
         <button class="tester-toggle" id="testBtn">Step 3. Test Keyboard</button>
 
         <div class="tester-section" id="fkey-tester">
-            <h3>F-Key Tester (F1–F24 + modifiers)</h3>
-            <p style="color:#666;font-size:14px;margin-bottom:15px;text-align:center;">Press any F1–F24 (with CTRL / ALT / SHIFT / GUI) and this page will capture it so it won’t trigger system actions.</p>
-            <div class="fkey-grid" id="fkeyGrid"></div>
+            <h3>Keyboard Tester</h3>
+            <p style="color:#666;font-size:14px;margin-bottom:15px;text-align:center;">Press any key (with CTRL / ALT / SHIFT / GUI modifiers) and this page will capture it so it won't trigger system actions.</p>
+            
+            <div class="key-section">
+                <h4>Function Keys (F1–F24)</h4>
+                <div class="fkey-grid" id="fkeyGrid"></div>
+            </div>
+            
+            <div class="key-section">
+                <h4>Letters (A–Z)</h4>
+                <div class="letter-grid" id="letterGrid"></div>
+            </div>
+            
+            <div class="key-section">
+                <h4>Numbers (0–9)</h4>
+                <div class="number-grid" id="numberGrid"></div>
+            </div>
+            
             <button class="secondary" onclick="document.getElementById('fkey-tester').style.display='none'; document.getElementById('testBtn').style.display='block';" style="margin-top:20px;width:100%;">Close Tester</button>
         </div>
 
@@ -241,6 +262,8 @@
             <div class="examples">
                 <strong>💡 Key Options:</strong>
                 <code>F1 - F24</code>
+                <code>A - Z</code>
+                <code>0 - 9</code>
                 <code>CTRL</code>
                 <code>ALT</code>
                 <code>SHIFT</code>
@@ -249,11 +272,14 @@
                 <strong style="display:block;margin-top:10px;">💡 Key Combo Examples:</strong>
                 <code>CTRL+F13</code>
                 <code>ALT+SHIFT+F14</code>
+                <code>CTRL+C</code>
+                <code>CTRL+ALT+DELETE</code>
+                <code>GUI+R</code>
                 <code>CTRL+ALT+GUI+F19</code>
 
                 <p style="margin-top:8px;color:#666;font-size:11px;line-height:1.5;">
-                    You can use single function keys or combine with modifiers: CTRL, ALT, SHIFT, GUI (CMD/WIN).<br>
-                    <em>(UI maps firmware codes like 240 → F13.)</em>
+                    You can use function keys (F1-F24), letters (A-Z), numbers (0-9), or combine with modifiers: CTRL, ALT, SHIFT, GUI (CMD/WIN).<br>
+                    <em>(UI maps firmware codes like 240 → F13, 4 → A, 30 → 1, etc.)</em>
                 </p>
             </div>
             
@@ -276,27 +302,43 @@
     </div>
 
     <script>
-        // ======== F-KEY MAPPING HELPERS ========
-        const F_DEC_TO_NAME = {};
-        const F_NAME_TO_KEYNAME = {};
+        // ======== KEY MAPPING HELPERS (F-KEYS + A-Z + 0-9) ========
+        const KEY_DEC_TO_NAME = {};
+        const KEY_NAME_TO_KEYNAME = {};
 
         // F1–F12 = 194–205
         for (let i = 1; i <= 12; i++) {
             const code = 193 + i; // 194–205
-            F_DEC_TO_NAME[code] = `F${i}`;
-            F_NAME_TO_KEYNAME[`F${i}`] = `KEY_F${i}`;
+            KEY_DEC_TO_NAME[code] = `F${i}`;
+            KEY_NAME_TO_KEYNAME[`F${i}`] = `KEY_F${i}`;
         }
         // F13–F24 = 240–251
         for (let i = 13; i <= 24; i++) {
             const code = 240 + (i - 13); // 240–251
-            F_DEC_TO_NAME[code] = `F${i}`;
-            F_NAME_TO_KEYNAME[`F${i}`] = `KEY_F${i}`;
+            KEY_DEC_TO_NAME[code] = `F${i}`;
+            KEY_NAME_TO_KEYNAME[`F${i}`] = `KEY_F${i}`;
+        }
+        // A-Z = 4–29
+        for (let i = 0; i < 26; i++) {
+            const code = 4 + i;
+            const letter = String.fromCharCode(65 + i);
+            KEY_DEC_TO_NAME[code] = letter;
+            KEY_NAME_TO_KEYNAME[letter] = `KEY_${letter}`;
         }
 
-        function toPrettyFKey(value) {
+        // 0-9
+        for (let i = 1; i <= 9; i++) {
+            const code = 0x1E + (i - 1);
+            KEY_DEC_TO_NAME[code] = String(i);
+            KEY_NAME_TO_KEYNAME[String(i)] = `KEY_${i}`;
+        }
+        KEY_DEC_TO_NAME[0x27] = '0';
+        KEY_NAME_TO_KEYNAME['0'] = 'KEY_0';
+
+        function toPrettyKey(value) {
             const n = Number(String(value).trim());
-            return Number.isFinite(n) && F_DEC_TO_NAME[n]
-                ? F_DEC_TO_NAME[n]
+            return Number.isFinite(n) && KEY_DEC_TO_NAME[n]
+                ? KEY_DEC_TO_NAME[n]
                 : `Unknown (${value})`;
         }
 
@@ -309,18 +351,26 @@
             const synonyms = { CMD: 'GUI', WIN: 'GUI', WINDOWS: 'GUI' };
             const modifiers = ['CTRL', 'ALT', 'SHIFT', 'GUI'];
             const detected = { CTRL: false, ALT: false, SHIFT: false, GUI: false };
-            let fkey = null;
+            let baseKey = null;
 
             for (const part of parts) {
                 const normalized = synonyms[part] || part;
-                if (modifiers.includes(normalized)) detected[normalized] = true;
-                else if (/^F\d{1,2}$/.test(normalized)) fkey = normalized;
+                if (modifiers.includes(normalized)) {
+                    detected[normalized] = true;
+                } else if (/^F\d{1,2}$/.test(normalized)) {
+                    baseKey = normalized;
+                } else if (/^[A-Z]$/.test(normalized)) {
+                    baseKey = normalized;
+                } else if (/^[0-9]$/.test(normalized)) {
+                    baseKey = normalized;
+                }
             }
 
-            if (!fkey) return null;
-            if (!F_NAME_TO_KEYNAME[fkey]) return null;
+            if (!baseKey) return null;
+            if (!KEY_NAME_TO_KEYNAME[baseKey]) return null;
 
-            let token = F_NAME_TO_KEYNAME[fkey];
+            let token = KEY_NAME_TO_KEYNAME[baseKey];
+            
             const prefix = [];
             if (detected.CTRL) prefix.push('CTRL');
             if (detected.SHIFT) prefix.push('SHIFT');
@@ -349,7 +399,6 @@
         // Tester elements
         const testBtn = document.getElementById('testBtn');
         const fkeyTester = document.getElementById('fkey-tester');
-        const fkeyGrid = document.getElementById('fkeyGrid');
 
         // ======== SERIAL STATE ========
         let configPort = null;
@@ -405,9 +454,13 @@
 
         // ======== INTERACTIVE KEY CONFIG UI ========
         const modifiersList = ["CTRL", "ALT", "SHIFT", "GUI"];
-        const fKeysList = Array.from({ length: 24 }, (_, i) => `F${i + 1}`);
+        const allKeys = [
+            ...Array.from({ length: 24 }, (_, i) => `F${i + 1}`),
+            ...Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i)),
+            ...'0123456789'.split('')
+        ];
 
-        function createKeyPicker(index, defaultF) {
+        function createKeyPicker(index, defaultKey) {
             const wrapper = document.createElement("div");
             wrapper.className = "key-item";
             wrapper.dataset.button = index;
@@ -433,16 +486,45 @@
             });
             wrapper.appendChild(modsDiv);
 
-            // F-key select
+            // Key select with optgroups
             const select = document.createElement("select");
             select.className = "fkey-select";
-            fKeysList.forEach(k => {
+            
+            // F-keys group
+            const fkeyGroup = document.createElement("optgroup");
+            fkeyGroup.label = "Function Keys";
+            for (let i = 1; i <= 24; i++) {
                 const opt = document.createElement("option");
-                opt.value = k;
-                opt.textContent = k;
-                select.appendChild(opt);
+                opt.value = `F${i}`;
+                opt.textContent = `F${i}`;
+                fkeyGroup.appendChild(opt);
+            }
+            select.appendChild(fkeyGroup);
+            
+            // Letters group
+            const letterGroup = document.createElement("optgroup");
+            letterGroup.label = "Letters";
+            for (let i = 0; i < 26; i++) {
+                const letter = String.fromCharCode(65 + i);
+                const opt = document.createElement("option");
+                opt.value = letter;
+                opt.textContent = letter;
+                letterGroup.appendChild(opt);
+            }
+            select.appendChild(letterGroup);
+            
+            // Numbers group
+            const numberGroup = document.createElement("optgroup");
+            numberGroup.label = "Numbers";
+            '0123456789'.split('').forEach(num => {
+                const opt = document.createElement("option");
+                opt.value = num;
+                opt.textContent = num;
+                numberGroup.appendChild(opt);
             });
-            select.value = defaultF;
+            select.appendChild(numberGroup);
+            
+            select.value = defaultKey;
             select.dataset.button = index;
             wrapper.appendChild(select);
 
@@ -506,7 +588,11 @@
         // initial render for default selection
         renderDefaultMappings('esp32c3-ble');
 
-        // ======== KEYBOARD TESTER (F1–F24 + modifiers, capture & suppress) ========
+        // ======== KEYBOARD TESTER (F1–F24 + A-Z + 0-9 + modifiers, capture & suppress) ========
+        const fkeyGrid = document.getElementById('fkeyGrid');
+        const letterGrid = document.getElementById('letterGrid');
+        const numberGrid = document.getElementById('numberGrid');
+        
         function buildFKeyGrid() {
             fkeyGrid.innerHTML = '';
             for (let i = 1; i <= 24; i++) {
@@ -517,31 +603,88 @@
                 fkeyGrid.appendChild(keyEl);
             }
         }
+        
+        function buildLetterGrid() {
+            letterGrid.innerHTML = '';
+            for (let i = 0; i < 26; i++) {
+                const letter = String.fromCharCode(65 + i);
+                const keyEl = document.createElement('div');
+                keyEl.className = 'letter-key';
+                keyEl.dataset.key = letter;
+                keyEl.innerHTML = `<div class="label">${letter}</div><div class="mods"></div>`;
+                letterGrid.appendChild(keyEl);
+            }
+        }
+        
+        function buildNumberGrid() {
+            numberGrid.innerHTML = '';
+            '1234567890'.split('').forEach(num => {
+                const keyEl = document.createElement('div');
+                keyEl.className = 'number-key';
+                keyEl.dataset.key = num;
+                keyEl.innerHTML = `<div class="label">${num}</div><div class="mods"></div>`;
+                numberGrid.appendChild(keyEl);
+            });
+        }
+        
         buildFKeyGrid();
+        buildLetterGrid();
+        buildNumberGrid();
 
-        // Track currently shown-as-pressed F-keys (to recover missing keyups)
-        const pressedF = new Set();
+        // Track currently shown-as-pressed keys (to recover missing keyups)
+        const pressedKeys = new Set();
 
-        // Helper: is this an F1–F24 key?
-        function parseFKeyFromEvent(e) {
-            // Prefer KeyboardEvent.code (e.g., "F13") where available
+        // Helper: parse key name from event
+        function parseKeyFromEvent(e) {
+            // F-keys (F1–F24)
             let code = e.code || '';
             if (/^F\d{1,2}$/.test(code)) {
                 const n = parseInt(code.slice(1), 10);
-                if (n >= 1 && n <= 24) return `F${n}`;
+                if (n >= 1 && n <= 24) return { type: 'fkey', key: `F${n}` };
             }
-            // Fallback: try key if browser reports "F1" etc.
             let key = e.key || '';
             if (/^F\d{1,2}$/.test(key)) {
                 const n = parseInt(key.slice(1), 10);
-                if (n >= 1 && n <= 24) return `F${n}`;
+                if (n >= 1 && n <= 24) return { type: 'fkey', key: `F${n}` };
             }
+            
+            // Letters (A-Z) - check code like "KeyA"
+            if (/^Key[A-Z]$/.test(code)) {
+                const letter = code.slice(3);
+                return { type: 'letter', key: letter };
+            }
+            // Fallback to key property for letters
+            if (/^[a-zA-Z]$/.test(key)) {
+                return { type: 'letter', key: key.toUpperCase() };
+            }
+            
+            // Numbers (0-9)
+            if (/^Digit[0-9]$/.test(code)) {
+                const num = code.slice(5);
+                return { type: 'number', key: num };
+            }
+            // Fallback to key property for numbers
+            if (/^[0-9]$/.test(key)) {
+                return { type: 'number', key: key };
+            }
+            
             return null;
         }
 
-        function updateKeyVisual(fName, isDown, e) {
-            const el = document.querySelector(`.fkey[data-key="${fName}"]`);
+        function updateKeyVisual(keyInfo, isDown, e) {
+            if (!keyInfo) return;
+            
+            let el = null;
+            if (keyInfo.type === 'fkey') {
+                el = document.querySelector(`.fkey[data-key="${keyInfo.key}"]`);
+            } else if (keyInfo.type === 'letter') {
+                el = document.querySelector(`.letter-key[data-key="${keyInfo.key}"]`);
+            } else if (keyInfo.type === 'number') {
+                el = document.querySelector(`.number-key[data-key="${keyInfo.key}"]`);
+            }
+            
             if (!el) return;
+            
             if (isDown) {
                 el.classList.add('active');
                 const modsDiv = el.querySelector('.mods');
@@ -560,8 +703,8 @@
         }
 
         function clearAllActive() {
-            pressedF.forEach(f => updateKeyVisual(f, false));
-            pressedF.clear();
+            pressedKeys.forEach(keyInfo => updateKeyVisual(keyInfo, false));
+            pressedKeys.clear();
         }
 
         function suppress(e) {
@@ -574,26 +717,32 @@
 
         // Use capture + passive:false so preventDefault works with Cmd/Meta combos
         window.addEventListener('keydown', (e) => {
-            const fName = parseFKeyFromEvent(e);
-            if (fName) {
-                updateKeyVisual(fName, true, e);
-                pressedF.add(fName);
-                logToConsole(`F-Key DOWN: ${fName} ${e.ctrlKey?'+CTRL':''}${e.shiftKey?'+SHIFT':''}${e.altKey?'+ALT':''}${e.metaKey?'+GUI':''}`, 'info');
+            const keyInfo = parseKeyFromEvent(e);
+            if (keyInfo) {
+                updateKeyVisual(keyInfo, true, e);
+                pressedKeys.add(keyInfo);
+                const modStr = `${e.ctrlKey?'+CTRL':''}${e.shiftKey?'+SHIFT':''}${e.altKey?'+ALT':''}${e.metaKey?'+GUI':''}`;
+                logToConsole(`Key DOWN: ${keyInfo.key}${modStr}`, 'info');
                 suppress(e);
             }
         }, { capture: true, passive: false });
 
         window.addEventListener('keyup', (e) => {
-            const fName = parseFKeyFromEvent(e);
-            if (fName) {
-                updateKeyVisual(fName, false, e);
-                pressedF.delete(fName);
-                logToConsole(`F-Key UP: ${fName}`, 'info');
+            const keyInfo = parseKeyFromEvent(e);
+            if (keyInfo) {
+                updateKeyVisual(keyInfo, false, e);
+                // Remove matching key from set
+                pressedKeys.forEach(k => {
+                    if (k.key === keyInfo.key && k.type === keyInfo.type) {
+                        pressedKeys.delete(k);
+                    }
+                });
+                logToConsole(`Key UP: ${keyInfo.key}`, 'info');
                 suppress(e);
             }
         }, { capture: true, passive: false });
 
-        // macOS/Safari/Chrome quirk: when Meta/GUI releases, F-key keyup may never fire.
+        // macOS/Safari/Chrome quirk: when Meta/GUI releases, key keyup may never fire.
         // Clear any stuck tiles on Meta keyup.
         window.addEventListener('keyup', (e) => {
             if (e.key === 'Meta') {
@@ -643,16 +792,15 @@
                             if (line.startsWith('KEY:')) {
                                 const parts = line.split(':');
 
-                                // expected: KEY:<index>:<code>:<mods>
                                 if (parts.length >= 4) {
                                     const buttonIndex = parseInt(parts[1], 10);
                                     const rawCode = Number(parts[2]);
                                     const mods = parts[3].trim();
 
-                                    const base = F_DEC_TO_NAME[rawCode] || `Unknown (${rawCode})`;
+                                    const base = KEY_DEC_TO_NAME[rawCode] || `Unknown (${rawCode})`;
                                     const item = getKeyItem(buttonIndex);
-                                    if (item && /^F\d{1,2}$/.test(base)) {
-                                        if (fKeysList.includes(base)) item.select.value = base;
+                                    if (item && KEY_NAME_TO_KEYNAME[base]) {
+                                        if (allKeys.includes(base)) item.select.value = base;
                                         modifiersList.forEach(m => item.modChecks[m].checked = false);
 
                                         if (mods && mods !== '-' && mods !== '') {
@@ -665,12 +813,11 @@
                                         logToConsole(`✓ Updated Button ${buttonIndex + 1} to: ${mods && mods !== '-' ? mods + '+' : ''}${base}`, 'info');
                                     }
                                 } else if (parts.length >= 3) {
-                                    // old format: KEY:<index>:<code>
                                     const buttonIndex = parseInt(parts[1], 10);
                                     const rawVal = parts[2];
-                                    const pretty = toPrettyFKey(rawVal);
+                                    const pretty = toPrettyKey(rawVal);
                                     const item = getKeyItem(buttonIndex);
-                                    if (item && /^F\d{1,2}$/.test(pretty)) {
+                                    if (item && KEY_NAME_TO_KEYNAME[pretty]) {
                                         item.select.value = pretty;
                                         modifiersList.forEach(m => item.modChecks[m].checked = false);
                                         logToConsole(`✓ Updated Button ${buttonIndex + 1} to: ${pretty}`, 'info');
