@@ -119,6 +119,7 @@ The merged binary includes the bootloader, partition table, and application firm
 - The merged binary includes the bootloader, partition table, and application firmware in a single file
 - This binary format is suitable for use with the web flasher
 - **For S3 USB HID mode:** The `USB Mode: USB-OTG (TinyUSB)` setting is essential for proper USB HID keyboard functionality
+- On macOS, F14 and F15 are reserved at the system level and are not exposed to applications by default. If these keys appear non-functional, this is a macOS limitation — not a hardware or firmware issue. Remapping is required to use them.
 
 ---
 
