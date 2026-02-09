@@ -54,23 +54,6 @@ If you need to rebuild the merged firmware binary used by the web flasher, follo
 
 ### How to Rebuild
 
-1. Open the project in **Arduino IDE**
-2. Select the following options from the **Tools** menu:
-   - **Board:** `ESP32C3 Dev Module`
-   - **USB CDC On Boot:** `Enabled`
-3. Build the firmware:
-   - `Sketch → Export Compiled Binary`
-4. Locate the generated merged binary in the sketch folder:
-   - `*.ino.merged*.bin`
-5. (Optional) Rename the file for your flasher or release:
-   - `cheap_deck_c3_ble_v1.0.1.bin`
-6. Update the manigest.json
-
-The merged binary includes the bootloader, partition table, and application firmware in a single file and is suitable for use with the web flasher.
-
-
-### How to Rebuild
-
 #### For ESP32-C3 (Bluetooth)
 
 1. Open the project in **Arduino IDE**
