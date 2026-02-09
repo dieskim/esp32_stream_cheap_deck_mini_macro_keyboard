@@ -46,7 +46,61 @@ You can:
 ---
 
 ## 🛠️ Advanced / Manual Setup
-If you prefer flashing via Arduino IDE, you can still download the Arduino Sketch and Manually Flash it.
+
+If you prefer flashing via Arduino IDE, you can download the Arduino Sketch and manually flash it.
+
+### 📋 Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+#### 1. Arduino IDE
+- **Download:** [Arduino IDE](https://www.arduino.cc/en/software)
+- **Recommended Version:** 2.0 or higher
+
+#### 2. ESP32 Board Support
+1. Open Arduino IDE
+2. Go to `File` → `Preferences`
+3. Add this URL to "Additional Boards Manager URLs":https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+4. Go to `Tools` → `Board` → `Boards Manager`
+5. Search for "ESP32" by Espressif Systems
+6. **Install version 3.3.2** (tested with 3.3.2)
+
+#### 3. Required Libraries
+
+Install the following libraries via `Sketch` → `Include Library` → `Manage Libraries`:
+
+##### For Bluetooth (BLE) Mode:
+| Library | Author | Version | Installation Method |
+|---------|--------|---------|---------------------|
+| **ESP32 BLE Keyboard** | T-vK | 0.3.2 | Library Manager or [GitHub Release](https://github.com/T-vK/ESP32-BLE-Keyboard/releases) |
+| **Preferences** | - | Built-in | Included with ESP32 core |
+
+**Note:** Some versions of this project may use NimBLE instead. If the code includes `<NimBLEDevice.h>`, install:
+- **NimBLE-Arduino** by h2zero (version 2.3.6)
+
+##### For USB HID Mode (S3 Only):
+- No additional libraries required (uses built-in TinyUSB)
+
+### 🔧 Board Configuration
+
+#### For ESP32-C3 (Bluetooth)
+1. Select `Tools` → `Board` → `ESP32C3 Dev Module`
+2. Set `Tools` → `USB CDC On Boot` → `Enabled`
+3. Select your COM port under `Tools` → `Port`
+
+#### For ESP32-S3 (Bluetooth)
+1. Select `Tools` → `Board` → `ESP32S3 Dev Module`
+2. Set `Tools` → `USB CDC On Boot` → `Enabled`
+3. Select your COM port under `Tools` → `Port`
+
+#### For ESP32-S3 (USB HID)
+1. Select `Tools` → `Board` → `ESP32S3 Dev Module`
+2. Set `Tools` → `USB CDC On Boot` → `Enabled`
+3. Set `Tools` → `USB Mode` → `USB-OTG (TinyUSB)` ⚠️ **CRITICAL for USB HID**
+4. Set `Tools` → `USB DFU On Boot` → `Disabled`
+5. Select your COM port under `Tools` → `Port`
+
+---
 
 ## 🛠️ How to Rebuild the Firmware (Arduino IDE)
 
