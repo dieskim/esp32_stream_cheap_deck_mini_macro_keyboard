@@ -70,13 +70,17 @@ Before you begin, ensure you have the following installed:
 Install the following libraries via `Sketch` → `Include Library` → `Manage Libraries`:
 
 ##### For Bluetooth (BLE) Mode:
+
 | Library | Author | Version | Installation Method |
 |---------|--------|---------|---------------------|
 | **ESP32 BLE Keyboard** | T-vK | 0.3.2 | Library Manager or [GitHub Release](https://github.com/T-vK/ESP32-BLE-Keyboard/releases) |
+| **NimBLE-Arduino** | h2zero | 2.3.6 | Library Manager |
 | **Preferences** | - | Built-in | Included with ESP32 core |
 
-**Note:** Some versions of this project may use NimBLE instead. If the code includes `<NimBLEDevice.h>`, install:
-- **NimBLE-Arduino** by h2zero (version 2.3.6)
+**Installing ESP32 BLE Keyboard via ZIP (Alternative Method):**
+1. Download 0.3.2 from the [GitHub Release page](https://github.com/T-vK/ESP32-BLE-Keyboard/releases)
+2. In Arduino IDE go to `Sketch` → `Include Library` → `Add .ZIP Library...`
+3. Select the downloaded ZIP file
 
 ##### For USB HID Mode (S3 Only):
 - No additional libraries required (uses built-in TinyUSB)
